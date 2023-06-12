@@ -1,13 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <mcl/bls12_381.hpp>
-
-using namespace mcl::bn;
-using namespace std;
+#include "khprf.h"
 
 // Function to perform the setup
-void setup(int n, vector<G1>& arr1, vector<G2>& arr2) {
+void khprf::setup(int sz) {
     // Initialize MCL library
+    n = sz;
     initPairing(mcl::BLS12_381);
     // if (initPairing(mcl::BLS12_381) != 0) {
     //     cout << "Failed to initialize MCL library!" << endl;
@@ -25,51 +21,69 @@ void setup(int n, vector<G1>& arr1, vector<G2>& arr2) {
 	const char *g2Str = "1 0x24aa2b2f08f0a91260805272dc51051c6e47ad4fa403b02b4510b647ae3d1770bac0326a805bbefd48056c8c121bdb8 0x13e02b6052719f607dacd3a088274f65596bd0d09920b61ab5da61bbdc7f5049334cf11213945d57e5ac7d055d042b7e 0x0ce5d527727d6e118cc9cdc6da2e351aadfd9baa8cbdd3a76d429a695160d12c923ac9cc3baca289e193548608b82801 0x0606c4a02ea734cc32acd2b02bc28b99cb3e287e85a763af267492ab572e99ab3f370d275cec1da1aaa9075ff05f79be";
 	Q.setStr(&check,g2Str,16);
 
+    // GT tempgt;
+    // pairing(tempgt,P,Q);
+    // cout<<tempgt<<" is temporary pairing operation\n";
     // Generate a random element x in the order of the asymmetric group
     Fr x;
     x.setByCSPRNG();
+    // cout<<"x is "<<x<<"\n";
 
     // Compute arr1 of size n+1
-    arr1.resize(n + 1);
-    arr1[0] = P; // Generator g1
+    g1.resize(n + 1);
+    g1[0] = P; // Generator g1
 
     for (int i = 1; i <= n; ++i) {
-        G1::mul(arr1[i], arr1[i - 1], x);
+        G1::mul(g1[i], g1[i - 1], x);
     }
 
     // Compute arr2 of size 2n+1
-    arr2.resize(2 * n + 1);
-    arr2[0] = Q; // Generator g2
+    g2.resize(2 * n + 2);
+    g2[0] = Q; // Generator g2
 
-    for (int i = 1; i <= 2 * n; ++i) {
-        G2::mul(arr2[i], arr2[i - 1], x);
+    for (int i = 1; i <= 2 * n+1; ++i) {
+        G2::mul(g2[i], g2[i - 1], x);
     }
 
     // Set arr2[n + 1] to a null or dummy element
-    arr2[n + 1].clear();
+    g2[n + 1].clear();
 }
 
-int main() {
-    // Define the variables
-    int n = 10;
-    vector<G1> arr1;
-    vector<G2> arr2;
-
-    // Call the setup function
-    setup(n, arr1, arr2);
-
-    // Print the computed arrays
-    cout << "arr1: ";
-    for (const auto& element : arr1) {
+void khprf::print() {
+    cout << "n is "<<n<<"\n";
+    cout << "g1: ";
+    for (const auto& element : g1) {
         cout << element << " ";
     }
-    cout << endl;
+    cout << "\n";
 
-    cout << "arr2: ";
-    for (const auto& element : arr2) {
+    cout << "g2: ";
+    for (const auto& element : g2) {
         cout << element << " ";
     }
-    cout << endl;
+    cout << "\n";
+}
 
-    return 0;
+void khprf::setkey() {
+    key.setByCSPRNG();
+    // cout<<"key is "<<key<<"\n";
+}
+
+void khprf::prfeval(GT &result, int i) {
+    GT val;
+    pairing(val, g1[0],g2[n+1+i]);
+    GT::pow(result,val,key);
+}
+
+
+void khprf::puncture(G1 &result, int i) {
+    G1::mul(result,g1[i],key);
+}
+
+void khprf::punceval(GT &result, G1 &punckey, int punci, int i) {
+    if (i==punci) {
+        cout<<"cannot evaluate at punctured spot\n";
+        return;
+    }
+    pairing(result, punckey,g2[n+1+i-punci]);
 }

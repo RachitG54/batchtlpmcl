@@ -1,30 +1,27 @@
-// #ifndef khprf
-// #define khprf
+#ifndef khprfdef
+#define khprfdef
 
-// #include <mcl/bls12_381.hpp>
+#include <iostream>
+#include <vector>
+#include <mcl/bls12_381.hpp>
 
-// class pp {
-// private:
-//     pairing_ptr pairing;
-//     element_t *g1arr;  // size n+1. Jesko: I put g1 in this because g1^{x^0}=g1 and then the indeces for the arrary matches the paper
-//     element_t *g2arr;  // size 2n+2 with n+1 null. Jesko: same here
-//     int n;
 
-// };
+using namespace mcl::bn;
+using namespace std;
 
-// class EDBSetup {
-// private:
-// 	SSEECDH group;
-// 	uint32_t indlen = 4;
-// 	uint32_t KEYLENGTH;
+class khprf {
+private:
+    vector<G1> g1;
+    vector<G2> g2;
+    int n;
+    Fr key;
+public:
+	void setup(int sz);
+	void setkey();
+	void prfeval(GT &result, int i);
+	void puncture(G1 &result, int i);
+	void punceval(GT &result, G1 &punckey, int punci, int i);
+	void print();
+};
 
-// public:
-// 	uint32_t enclen = 32;
-// 	TSet TSetobj;
-//     EDBSetup();
-//     void initialize();
-//     uint32_t getindlen();
-//     ~EDBSetup();
-// };
-
-// #endif // khprf
+#endif // khprfdef

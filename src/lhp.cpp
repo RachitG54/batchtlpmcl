@@ -25,6 +25,8 @@ void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 	/*gmp_printf ( "Generated %d-bit Strong Primes\np: %Zx\nq: %Zx\n" , lambda , p*/
 		/*, q ) ;*/
 	mpz_mul ( params->N , p , q ) ;
+	char* tempstr = mpz_get_str(NULL, 10, params->N);
+	printf("tempstr is %s\n",tempstr);
 	/*
 	 * 1. Generate g = -g^2 mod N
 	 * 2. Generate t1 = phi(n)

@@ -9,8 +9,8 @@ EXT_LIBS = -lgmp -lpbc -lssl -lcrypto -lmcl
 # MCL_LIB=$(MCL_LIB_DIR)/libmcl.a
 # BN256_SLIB_LDFLAGS+=-lmcl -L./lib
 
-# TARGET   = testlibs
-TARGET   = khprf
+TARGET   = testlibs
+# TARGET   = khprf
 
 DEBUG=n
 CC       = g++

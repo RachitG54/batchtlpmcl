@@ -11,6 +11,7 @@
 
 #include "lhp.h"
 #include "util.h"
+#include "khprf.h"
 
 using namespace mcl::bn;
 
@@ -153,31 +154,69 @@ static void CLEAN ()
 	free ( puzzle_array ) ;
 }
 
-// int main ( int argc , char* argv[] )
-// {
-// 	if (argc == 1) {
-// 		initPairing(mcl::BLS12_381);
-// 		puts("BLS12_381");
-// 	} else {
-// 		initPairing(mcl::BN254);//, mcl::fp::FP_GMP);
-// 		puts("BN254");
-// 	}
-// 	G1 P;
-// 	G2 Q;
-// 	hashAndMapToG1(P, "abc", 3);
-// 	hashAndMapToG2(Q, "abc", 3);
-// 	printf("P = %s\n", P.serializeToHexStr().c_str());
-// 	printf("Q = %s\n", Q.serializeToHexStr().c_str());
+void testkhprf() {
+	int n = 10;
+	khprf prf1;
+	prf1.setup(10);
 
-// 	minimum_sample(P, Q);
-// 	miller_and_finel_exp(P, Q);
-// 	precomputed(P, Q);
-	
-// 	INIT ();
-// 	SETUP_TEST ();
-// 	GEN_TEST ();
-// 	SOLVE_TEST ();
-// 	BATCH_TEST ();
-// 	CLEAN (); // Clean up
-// 	return 0 ;
-// }
+	// Fp& order = G1::getOrder();
+	// cout<<"order of G1 is "<<order<<"\n";
+
+	// const Fp& order = Fp::getModulo();
+
+    // Print the order
+    std::cout << "Order of the base field: " << Fr::getModulo() << std::endl;
+
+    // prf1.print();
+
+    // cout<<"\n\n";
+    // prf1.setkey();
+
+    // vector<GT> evals;
+    // evals.resize(n+1);
+    // for(int i=1; i<=n; i++) {
+	//     prf1.prfeval(evals[i],i);
+	//     cout<<"Evaluation at "<<i<<" is "<<evals[i]<<"\n";
+    // }
+
+    // cout<<"Beginning punctured test.\n\n";
+    // for(int i = 1;i<=n;i++) {
+    // 	G1 punckey;
+    // 	prf1.puncture(punckey,i);
+    // 	for(int j = 1; j <=n; j++) {
+    // 		GT tempval;
+    // 		tempval.clear();
+    // 		prf1.punceval(tempval,punckey,i,j);  
+    // 		cout<<"Punctured evaluation at "<<j<<" is "<<tempval<<"\n";		
+    // 	}
+    // }
+}
+void testlhtlp() {
+	INIT ();
+	SETUP_TEST ();
+	GEN_TEST ();
+	SOLVE_TEST ();
+	BATCH_TEST ();
+	CLEAN (); // Clean up
+}
+
+void testmcl() {
+	initPairing(mcl::BLS12_381);
+	puts("BLS12_381");
+	G1 P;
+	G2 Q;
+	hashAndMapToG1(P, "abc", 3);
+	hashAndMapToG2(Q, "abc", 3);
+	printf("P = %s\n", P.serializeToHexStr().c_str());
+	printf("Q = %s\n", Q.serializeToHexStr().c_str());
+
+	minimum_sample(P, Q);
+	miller_and_finel_exp(P, Q);
+	precomputed(P, Q);
+}
+int main ( int argc , char* argv[] )
+{
+	testlhtlp();
+	testkhprf();
+	return 0;
+}
