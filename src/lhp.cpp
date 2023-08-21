@@ -3,13 +3,7 @@
  * 2019
  * */
 
-#include <gmp.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include <openssl/sha.h>
 #include "lhp.h"
-#include "util.h"
 
 void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 	uint64_t lambda , uint64_t T )
@@ -26,7 +20,7 @@ void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 		/*, q ) ;*/
 	mpz_mul ( params->N , p , q ) ;
 	char* tempstr = mpz_get_str(NULL, 10, params->N);
-	printf("tempstr is %s\n",tempstr);
+	printf("modulus N is %s\n",tempstr);
 	/*
 	 * 1. Generate g = -g^2 mod N
 	 * 2. Generate t1 = phi(n)
@@ -61,6 +55,21 @@ void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , unsigned char* str ,
 		mpz_mul_ui ( s , s , 1 << 8 ) ;
 		mpz_add_ui ( s , s , (uint8_t)str[i] ) ;
 	}
+	// unsigned char* numberStr = (unsigned char*)mpz_get_str(NULL, 10, s);
+
+
+	// size_t byteCount = (mpz_sizeinbase(s, 256) + 7) / 8+10;
+	// size_t byteCount = s_size+10;
+    // unsigned char* byteData = new unsigned char[byteCount]();
+
+    // // // Convert the mpz_t number to base 256 bytes
+	// mpz_export(byteData, nullptr, 1, sizeof(unsigned char), 0, 0, s);
+    // // mpz_export(byteData, NULL, 1, 1, 0, 0, s);
+
+    // cout << "bytedata is "<<byteData << "\n";
+	// cout << "str is "<<str<<"\n";
+	// cout << "numberStr is "<<numberStr << "\n";
+
 	mpz_t r , N2 , temp ;
 	mpz_init ( r ) ;
 	mpz_init ( N2 ) ;
@@ -146,6 +155,13 @@ void LHP_PSolve ( LHP_param_t* pp , LHP_puzzle_t* Z , LHP_puzzle_sol_t* solution
 	mpz_clear ( idx ) ;
 	mpz_clear ( w ) ;
 	mpz_clear ( N2 ) ;
+
+	// cout << mpz_sizeinbase(solution->s, 256) << " is the size\n";
+	// size_t byteCount = mpz_sizeinbase(solution->s, 256)+2;
+    // unsigned char* byteData = new unsigned char[byteCount]();
+
+	// mpz_export(byteData, nullptr, 1, sizeof(unsigned char), 0, 0, solution->s);
+    // cout << "solved bytedata is "<<byteData << "\n";
 }
 
 // Setup variable number of arguments
@@ -163,6 +179,27 @@ void LHP_PEval ( LHP_param_t* pp , LHP_puzzle_t* puzzle_array , size_t
 		mpz_mod ( dest_puzzle -> u , dest_puzzle -> u , pp -> N ) ;
 		// v = v*vi 
 		mpz_mul ( dest_puzzle -> v , dest_puzzle -> v , puzzle_array [ i ] .v ) ;
+		mpz_mod ( dest_puzzle -> v , dest_puzzle -> v , N2 ) ;
+	}
+	mpz_clear ( N2 ) ;
+}
+
+
+// Setup variable number of arguments
+void LHP_PEval ( LHP_param_t* pp , vector<classbtlp> &btlparray, size_t
+		num_puzzles , LHP_puzzle_t* dest_puzzle )
+{
+	mpz_t N2 ;
+	mpz_init ( N2 ) ;
+	mpz_mul ( N2 , pp -> N , pp -> N ) ;
+	mpz_init_set_ui ( dest_puzzle -> u , 1 ) ;
+	mpz_init_set_ui ( dest_puzzle -> v , 1 ) ;
+	for ( int i = 0 ; i < num_puzzles ; i++ ) {
+		// u = u*ui
+		mpz_mul ( dest_puzzle -> u , dest_puzzle -> u , btlparray[ i ].puzzle.u ) ;
+		mpz_mod ( dest_puzzle -> u , dest_puzzle -> u , pp -> N ) ;
+		// v = v*vi 
+		mpz_mul ( dest_puzzle -> v , dest_puzzle -> v , btlparray[ i ].puzzle.v ) ;
 		mpz_mod ( dest_puzzle -> v , dest_puzzle -> v , N2 ) ;
 	}
 	mpz_clear ( N2 ) ;

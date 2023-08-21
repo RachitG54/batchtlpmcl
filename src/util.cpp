@@ -3,9 +3,7 @@
  * 2019
  * */
 
-#include <stdlib.h>
 
-#include "config.h"
 #include "util.h"
 
 void generate_prime ( mpz_t p , uint64_t bit_count )

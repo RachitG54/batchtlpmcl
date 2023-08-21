@@ -1,13 +1,7 @@
 #ifndef khprfdef
 #define khprfdef
 
-#include <iostream>
-#include <vector>
-#include <mcl/bls12_381.hpp>
-
-
-using namespace mcl::bn;
-using namespace std;
+#include "btlpincludes.h"
 
 class khprf {
 private:
@@ -15,12 +9,17 @@ private:
     vector<G2> g2;
     int n;
     Fr key;
+    G1 punckey;
+    int keylen = 0;
 public:
 	void setup(int sz);
 	void setkey();
+	string getkey();
+	int getkeylen();
+	void clearkey();
 	void prfeval(GT &result, int i);
-	void puncture(G1 &result, int i);
-	void punceval(GT &result, G1 &punckey, int punci, int i);
+	void puncture(int i);
+	void punceval(GT &result, int punci, int i);
 	void print();
 };
 

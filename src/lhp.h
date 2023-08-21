@@ -3,10 +3,11 @@
  * 2019
  * */
 
-#include <stdint.h>
 
+#include "btlpincludes.h"
 #include "params.h"
 #include "puzzle.h"
+#include "util.h"
 
 #ifndef __LHP_HEADER__
 #define __LHP_HEADER__
@@ -26,5 +27,6 @@ void LHP_PSolve ( LHP_param_t* pp , LHP_puzzle_t* Z , LHP_puzzle_sol_t* ) ;
 
 // Setup variable number of arguments
 void LHP_PEval ( LHP_param_t* pp , LHP_puzzle_t* , size_t , LHP_puzzle_t* ) ;
+// void LHP_PEval ( LHP_param_t* pp , vector<classbtlp> &btlparray, size_t num_puzzles , LHP_puzzle_t* dest_puzzle );
 
 #endif

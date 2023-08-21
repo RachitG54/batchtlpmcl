@@ -1,7 +1,8 @@
 #include "btlp.h"
 
-void btlp::initialize () {
-	LHP_init_puzzle ( &dest_puzzle ) ;
+void btlp::initialize (int number) {
+	n = number;
+	// LHP_init_puzzle ( &dest_puzzle ) ;
 	puzzle_array = (LHP_puzzle_t*) malloc ( sizeof ( LHP_puzzle_t ) * n ) ;
 }
 

@@ -12,10 +12,12 @@
 #include "lhp.h"
 #include "util.h"
 #include "khprf.h"
+#include "btlp.h"
+#include "cobtlp.h"
+
+// #define SEC_PARAM 1024
 
 using namespace mcl::bn;
-
-#define SEC_PARAM 1024
 
 // Experimental Parameters
 int n = 200 ;
@@ -165,31 +167,30 @@ void testkhprf() {
 	// const Fp& order = Fp::getModulo();
 
     // Print the order
-    std::cout << "Order of the base field: " << Fr::getModulo() << std::endl;
+    // std::cout << "Order of the base field: " << Fr::getModulo() << std::endl;
 
-    // prf1.print();
+    prf1.print();
 
     // cout<<"\n\n";
-    // prf1.setkey();
+    prf1.setkey();
 
-    // vector<GT> evals;
-    // evals.resize(n+1);
-    // for(int i=1; i<=n; i++) {
-	//     prf1.prfeval(evals[i],i);
-	//     cout<<"Evaluation at "<<i<<" is "<<evals[i]<<"\n";
-    // }
+    vector<GT> evals;
+    evals.resize(n+1);
+    for(int i=1; i<=n; i++) {
+	    prf1.prfeval(evals[i],i);
+	    cout<<"Evaluation at "<<i<<" is "<<evals[i]<<"\n";
+    }
 
-    // cout<<"Beginning punctured test.\n\n";
-    // for(int i = 1;i<=n;i++) {
-    // 	G1 punckey;
-    // 	prf1.puncture(punckey,i);
-    // 	for(int j = 1; j <=n; j++) {
-    // 		GT tempval;
-    // 		tempval.clear();
-    // 		prf1.punceval(tempval,punckey,i,j);  
-    // 		cout<<"Punctured evaluation at "<<j<<" is "<<tempval<<"\n";		
-    // 	}
-    // }
+    cout<<"Beginning punctured test.\n\n";
+    for(int i = 1;i<=n;i++) {
+    	prf1.puncture(i);
+    	for(int j = 1; j <=n; j++) {
+    		GT tempval;
+    		tempval.clear();
+    		prf1.punceval(tempval,i,j);  
+    		cout<<"Punctured evaluation at "<<j<<" is "<<tempval<<"\n";		
+    	}
+    }
 }
 void testlhtlp() {
 	INIT ();
@@ -202,21 +203,110 @@ void testlhtlp() {
 
 void testmcl() {
 	initPairing(mcl::BLS12_381);
-	puts("BLS12_381");
-	G1 P;
-	G2 Q;
-	hashAndMapToG1(P, "abc", 3);
-	hashAndMapToG2(Q, "abc", 3);
-	printf("P = %s\n", P.serializeToHexStr().c_str());
-	printf("Q = %s\n", Q.serializeToHexStr().c_str());
+	puts("BLS12`_381");
 
-	minimum_sample(P, Q);
-	miller_and_finel_exp(P, Q);
-	precomputed(P, Q);
+
+	// G1 P;
+	// G2 Q;
+	// hashAndMapToG1(P, "abc", 3);
+	// hashAndMapToG2(Q, "abc", 3);
+	// printf("P = %s\n", P.serializeToHexStr().c_str());
+	// printf("Q = %s\n", Q.serializeToHexStr().c_str());
+
+	// minimum_sample(P, Q);
+	// miller_and_finel_exp(P, Q);
+	// precomputed(P, Q);
+
+	G1 P;
+	bool check;
+	const char *g1Str = "1 0x17f1d3a73197d7942695638c4fa9ac0fc3688c4f9774b905a14e3a3f171bac586c55e83ff97a1aeffb3af00adb22c6bb 0x08b3f481e3aaa0f1a09e30ed741d8ae4fcf5e095d5d00af600db18cb2c04b3edd03cc744a2888ae40caa232946c5e7e1";
+	P.setStr(&check,g1Str, 16);
+
+	G2 Q;
+	const char *g2Str = "1 0x24aa2b2f08f0a91260805272dc51051c6e47ad4fa403b02b4510b647ae3d1770bac0326a805bbefd48056c8c121bdb8 0x13e02b6052719f607dacd3a088274f65596bd0d09920b61ab5da61bbdc7f5049334cf11213945d57e5ac7d055d042b7e 0x0ce5d527727d6e118cc9cdc6da2e351aadfd9baa8cbdd3a76d429a695160d12c923ac9cc3baca289e193548608b82801 0x0606c4a02ea734cc32acd2b02bc28b99cb3e287e85a763af267492ab572e99ab3f370d275cec1da1aaa9075ff05f79be";
+	Q.setStr(&check,g2Str,16);
+
+	// Fr customMessage;
+    // customMessage.setStr("12345678901234567890123456789012", 10); // Example custom message
+
+	GT gt;
+    pairing(gt, P,Q);
+
+    Fr x;
+    x.setByCSPRNG();
+
+    GT testpow;
+    GT::pow(testpow,gt,x);
+
+    // GT y;
+
+    // G1 a;
+    // a.setRand();
+    // pairing(y, a,Q);
+    // y.setRand();
+    // cout << y << "\n";
+    // cout << getGeneratorOfG2() << "\n";
+
+    // cout << testpow<<"\n";
+    // GT customMessage;
+    // customMessage.setStr("12345678901234567890123456789012", 10); // Example custom message
+
+	// string plaintext = "Secret message";
+	// GT encodedPlaintext;
+	// mapToGT(encodedPlaintext, plaintext.c_str(), plaintext.size());
+
+	// char decodedPlaintext[1024]; // Assuming maximum plaintext size is 1024 bytes
+    // mapToOriginal(decodedPlaintext, encodedPlaintext);
+
+    // cout << "Plaintext: " << plaintext << endl;
 }
+
 int main ( int argc , char* argv[] )
 {
-	testlhtlp();
-	testkhprf();
+	// testlhtlp();
+	
+	// testkhprf();
+
+	// btlp testbtlp;
+	// testbtlp.initialize(10);
+	// testbtlp.setuptlp(1000000);
+	// testbtlp.gentlp();
+	// testbtlp.solvetlp();
+	// testbtlp.batchtlp();
+	// testbtlp.cleantlp();
+
+	// testmcl();
+
+	initpairing();
+	cobtlp testcobtlp;
+	testcobtlp.initialize(10,1000000);
+	// string str1 = "yes1";
+	// string str2 = "yes2";
+	// string str3 = "yes3";
+	// G1 g1;
+	// G2 g2;
+	// getpairing(g1,g2);
+
+	GT randgt1;
+	getrandGT(randgt1);
+
+	// GT randgt2;
+	// getrandGT(randgt2);
+
+	// GT randgt3;
+	// getrandGT(randgt3);
+	// cout << randgt << "\n";
+
+	// const G1& generatorG1 = G1::getGenerator(); // Get the generator of G1
+    // const G2& generatorG2 = G2::getGenerator(); // Get the generator of G2
+	testcobtlp.gentlp(1,randgt1);
+	// testcobtlp.gentlp(2,randgt2);
+
+	testcobtlp.solvetlp(1);
+	// testcobtlp.solvetlp(2);
+
+	// testcobtlp.gentlp(3,randgt3);
+	// testcobtlp.gentlp(2,str2);
+	// testcobtlp.gentlp(3,str3);
 	return 0;
 }

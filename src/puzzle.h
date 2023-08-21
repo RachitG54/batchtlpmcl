@@ -3,6 +3,8 @@
  * 2019
  * */
 
+#include "btlpincludes.h"
+
 #ifndef __LHP_PUZZLE__
 #define __LHP_PUZZLE__
 

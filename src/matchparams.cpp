@@ -1,7 +1,4 @@
-#include <iostream>
-#include <cmath>
-
-using namespace std;
+#include "btlpincludes.h"
 
 double logBinomialCoefficient(int n, int k) {
     double result = 0.0;
@@ -32,13 +29,13 @@ double evaluateExpression(int n, int q, int m, int d) {
     return result;
 }
 
-int main() {
-    int n, q, m, d;
-    cout << "Enter the values of n, q, m, and d: ";
-    cin >> n >> q >> m >> d;
+// int main() {
+//     int n, q, m, d;
+//     cout << "Enter the values of n, q, m, and d: ";
+//     cin >> n >> q >> m >> d;
 
-    double logResult = evaluateExpression(n, q, m, d);
-    cout << "log x = " << logResult << endl;
+//     double logResult = evaluateExpression(n, q, m, d);
+//     cout << "log x = " << logResult << endl;
 
-    return 0;
-}
+//     return 0;
+// }

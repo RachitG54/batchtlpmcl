@@ -1,18 +1,20 @@
-#ifndef btlpdef
-#define btlpdef
+#ifndef uncobtlpdef
+#define uncobtlpdef
 
 #include "btlpincludes.h"
 #include "lhp.h"
 #include "util.h"
 #include "khprf.h"
 
+#define SEC_PARAM 1024
+
 using namespace std;
 
-class btlp {
+class uncobtlp {
 private:
 	int n;
 	uint64_t T;
-	khprf prf;
+	khprf pp;
 	LHP_param_t param ;
 	LHP_puzzle_t puzzle ;
 	LHP_puzzle_t *puzzle_array ;

@@ -3,9 +3,7 @@
  * 2019
  * */
 
-#include <gmp.h>
-#include <stdint.h>
-#include <sys/time.h>
+#include "btlpincludes.h"
 
 #ifndef __LHP_UTIL__
 #define __LHP_UTIL__

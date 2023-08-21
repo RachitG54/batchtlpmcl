@@ -3,8 +3,6 @@
  * 2019
  * */
 
-#include "gmp.h"
-
 #include "params.h"
 
 void LHP_init_param ( LHP_param_t* param )

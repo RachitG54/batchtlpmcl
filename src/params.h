@@ -6,7 +6,7 @@
 #ifndef __LHP_PARAM__
 #define __LHP_PARAM__
 
-#include <gmp.h>
+#include "btlpincludes.h"
 
 typedef struct LHP_param_t {
 	mpz_t T ;
