@@ -6,79 +6,6 @@ void handleErrors(string s) {
   abort();
 }
 
-// void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize) {
-
-
-//   mpz_t number;
-//   mpz_init(number);
-//   mpz_init_set_ui ( number , 0 ) ;
-//   for(int i = 0 ; i < numberStr ; i++) {
-//     mpz_mul_ui ( s , s , 1 << 8 ) ;
-//     mpz_add_ui ( s , s , (uint8_t)str[i] ) ;
-//   }
-//   mpz_clear(number);
-// }
-
-// Convert a very long base 10 number to binary bytes
-void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize) {
-    mpz_t number;
-    mpz_init(number);
-    mpz_set_str(number, numberStr.c_str(), 10);
-
-    // gmp_printf("Number: %Zd\n", number);
-    // size_t byteCount = mpz_sizeinbase(number, 10)+2;
-
-    mpz_t remainder;
-    mpz_init(remainder);
-    REP(i,0,bufferSize-1) {
-      mpz_mod_ui(remainder, number, 256);
-      byteBuffer[i] = mpz_get_ui(remainder);
-      mpz_div_ui(number,number,256);
-      // cout << (int)byteBuffer[i]<<" ";
-    }
-    mpz_clear(remainder);
-    // if (byteCount > bufferSize) {
-    //    cerr << byteCount << " " << bufferSize << "\n";
-    //    cerr << "Buffer size is insufficient for the conversion." << endl;
-    //     mpz_clear(number);
-    //     return;
-    // }
-
-    // mpz_export(byteBuffer, nullptr, 1, sizeof(unsigned char), 0, 0, number);
-    mpz_clear(number);
-}
-
-string convertToBase10String(const unsigned char* byteBuffer, size_t bufferSize) {
-    mpz_t number;
-    mpz_init(number);
-
-    mpz_init_set_ui ( number , 0 ) ;
-    mpz_t powr;
-    mpz_init(powr);
-
-    mpz_t intval;
-    mpz_init(intval);
-
-    mpz_set_ui(powr, 1);
-    for(int i = 0 ; i < bufferSize-1 ; i++) {
-      mpz_mul_ui ( intval , powr, (uint8_t)byteBuffer[i]) ;
-      mpz_add ( number , number , intval ) ;
-      mpz_mul_ui ( powr , powr , 1 << 8 ) ;
-    }
-    mpz_clear(intval);
-    mpz_clear(powr);
-    // mpz_import(number, bufferSize, 1, sizeof(unsigned char), 0, 0, byteBuffer);
-
-    // gmp_printf("New Number: %Zd\n", number);
-
-    char* base10Str = mpz_get_str(nullptr, 10, number);
-    string result = base10Str;
-
-    mpz_clear(number);
-    free(base10Str);
-
-    return result;
-}
 void initpairing() {
   initPairing(mcl::BLS12_381);
   // if (initPairing(mcl::BLS12_381) != 0) {
@@ -111,3 +38,91 @@ void getrandGT(GT &randgt) {
 
   GT::pow(randgt,gt,x);
 }
+
+
+
+
+
+
+// void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize) {
+
+
+//   mpz_t number;
+//   mpz_init(number);
+//   mpz_init_set_ui ( number , 0 ) ;
+//   for(int i = 0 ; i < numberStr ; i++) {
+//     mpz_mul_ui ( s , s , 1 << 8 ) ;
+//     mpz_add_ui ( s , s , (uint8_t)str[i] ) ;
+//   }
+//   mpz_clear(number);
+// }
+
+// Convert a very long base 10 number to binary bytes
+// void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize) {
+//     mpz_t number;
+//     mpz_init(number);
+//     mpz_set_str(number, numberStr.c_str(), 10);
+
+//     // gmp_printf("Number: %Zd\n", number);
+//     // size_t byteCount = mpz_sizeinbase(number, 10)+2;
+
+//     mpz_t remainder;
+//     mpz_init(remainder);
+//     REP(i,0,bufferSize-1) {
+//       mpz_mod_ui(remainder, number, 256);
+//       byteBuffer[i] = mpz_get_ui(remainder);
+//       mpz_div_ui(number,number,256);
+//       // cout << (int)byteBuffer[i]<<" ";
+//     }
+//     mpz_clear(remainder);
+//     // if (byteCount > bufferSize) {
+//     //    cerr << byteCount << " " << bufferSize << "\n";
+//     //    cerr << "Buffer size is insufficient for the conversion." << endl;
+//     //     mpz_clear(number);
+//     //     return;
+//     // }
+
+//     // mpz_export(byteBuffer, nullptr, 1, sizeof(unsigned char), 0, 0, number);
+//     mpz_clear(number);
+// }
+
+// string convertToBase10String(const unsigned char* byteBuffer, size_t bufferSize) {
+//     mpz_t number;
+//     mpz_init(number);
+
+//     mpz_init_set_ui ( number , 0 ) ;
+//     mpz_t powr;
+//     mpz_init(powr);
+
+//     mpz_t intval;
+//     mpz_init(intval);
+
+//     mpz_set_ui(powr, 1);
+//     for(int i = 0 ; i < bufferSize-1 ; i++) {
+//       mpz_mul_ui ( intval , powr, (uint8_t)byteBuffer[i]) ;
+//       mpz_add ( number , number , intval ) ;
+//       mpz_mul_ui ( powr , powr , 1 << 8 ) ;
+//       gmp_printf("Result: %Zd\n", number);
+//     }
+//     mpz_clear(intval);
+//     mpz_clear(powr);
+//     // mpz_import(number, bufferSize, 1, sizeof(unsigned char), 0, 0, byteBuffer);
+
+//     // gmp_printf("New Number: %Zd\n", number);
+
+//     char* base10Str = mpz_get_str(nullptr, 10, number);
+//     string result = base10Str;
+
+//     mpz_clear(number);
+//     free(base10Str);
+
+//     return result;
+// }
+
+// void printinbase10(mpz_t &num) {
+//   size_t bufferSize = mpz_sizeinbase(num, 256)+2;
+//   unsigned char* byteBuffer = new unsigned char[bufferSize]();
+//   mpz_export(byteBuffer, nullptr, 1, sizeof(unsigned char), 0, 0, num);
+//   string answer = convertToBase10String(byteBuffer,bufferSize);
+//   cout << "answer is "<<answer<<"\n";
+// }

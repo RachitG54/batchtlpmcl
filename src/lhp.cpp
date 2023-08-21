@@ -43,18 +43,24 @@ void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 
 // The function won't hash anything
 // Give the function a hashed string
-void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , unsigned char* str ,
-		size_t s_size )
+void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , string str)
 {
 	gmp_randstate_t state;
 	gmp_randinit_default( state ) ;
 	gmp_randseed_ui ( state , rand() ) ;
 	mpz_t s ;
-	mpz_init_set_ui ( s , 0 ) ;
-	for(int i = 0 ; i < s_size ; i++) {
-		mpz_mul_ui ( s , s , 1 << 8 ) ;
-		mpz_add_ui ( s , s , (uint8_t)str[i] ) ;
-	}
+
+	mpz_init(s) ;
+    mpz_set_str(s, str.c_str(), 10);
+	// mpz_init_set_ui ( s , 0 ) ;
+	// for(int i = 0 ; i < s_size ; i++) {
+	// 	mpz_mul_ui ( s , s , 1 << 8 ) ;
+	// 	mpz_add_ui ( s , s , (uint8_t)str[i] ) ;
+	// }
+
+	// gmp_printf("Result: %Zd\n", s);
+
+	// printinbase10(s);
 	// unsigned char* numberStr = (unsigned char*)mpz_get_str(NULL, 10, s);
 
 
@@ -186,21 +192,21 @@ void LHP_PEval ( LHP_param_t* pp , LHP_puzzle_t* puzzle_array , size_t
 
 
 // Setup variable number of arguments
-void LHP_PEval ( LHP_param_t* pp , vector<classbtlp> &btlparray, size_t
-		num_puzzles , LHP_puzzle_t* dest_puzzle )
-{
-	mpz_t N2 ;
-	mpz_init ( N2 ) ;
-	mpz_mul ( N2 , pp -> N , pp -> N ) ;
-	mpz_init_set_ui ( dest_puzzle -> u , 1 ) ;
-	mpz_init_set_ui ( dest_puzzle -> v , 1 ) ;
-	for ( int i = 0 ; i < num_puzzles ; i++ ) {
-		// u = u*ui
-		mpz_mul ( dest_puzzle -> u , dest_puzzle -> u , btlparray[ i ].puzzle.u ) ;
-		mpz_mod ( dest_puzzle -> u , dest_puzzle -> u , pp -> N ) ;
-		// v = v*vi 
-		mpz_mul ( dest_puzzle -> v , dest_puzzle -> v , btlparray[ i ].puzzle.v ) ;
-		mpz_mod ( dest_puzzle -> v , dest_puzzle -> v , N2 ) ;
-	}
-	mpz_clear ( N2 ) ;
-}
+// void LHP_PEval ( LHP_param_t* pp , vector<classbtlp> &btlparray, size_t
+// 		num_puzzles , LHP_puzzle_t* dest_puzzle )
+// {
+// 	mpz_t N2 ;
+// 	mpz_init ( N2 ) ;
+// 	mpz_mul ( N2 , pp -> N , pp -> N ) ;
+// 	mpz_init_set_ui ( dest_puzzle -> u , 1 ) ;
+// 	mpz_init_set_ui ( dest_puzzle -> v , 1 ) ;
+// 	for ( int i = 0 ; i < num_puzzles ; i++ ) {
+// 		// u = u*ui
+// 		mpz_mul ( dest_puzzle -> u , dest_puzzle -> u , btlparray[ i ].puzzle.u ) ;
+// 		mpz_mod ( dest_puzzle -> u , dest_puzzle -> u , pp -> N ) ;
+// 		// v = v*vi 
+// 		mpz_mul ( dest_puzzle -> v , dest_puzzle -> v , btlparray[ i ].puzzle.v ) ;
+// 		mpz_mod ( dest_puzzle -> v , dest_puzzle -> v , N2 ) ;
+// 	}
+// 	mpz_clear ( N2 ) ;
+// }

@@ -18,11 +18,12 @@ private:
 	LHP_puzzle_t *puzzle_array ;
 	LHP_puzzle_t dest_puzzle ;
 	LHP_puzzle_sol_t solution ;
-	unsigned char* str = (unsigned char*)"111111111111111111111"
-	"11111111111111111111111111111"
-	"11111111111111111111111111111"
-	"111111111111111111111" ;
-	int len = 100 ;
+	string str = "1111";
+	// unsigned char* str = (unsigned char*)"111111111111111111111"
+	// "11111111111111111111111111111"
+	// "11111111111111111111111111111"
+	// "111111111111111111111" ;
+	// int len = 100 ;
 
 public:
 	void initialize(int number);

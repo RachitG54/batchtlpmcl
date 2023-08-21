@@ -10,7 +10,7 @@ private:
     int n;
     Fr key;
     G1 punckey;
-    int keylen = 0;
+    int keylen;
 public:
 	void setup(int sz);
 	void setkey();

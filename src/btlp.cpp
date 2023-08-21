@@ -15,7 +15,7 @@ void btlp::setuptlp(uint64_t t) {
 
 void btlp::gentlp() {
 	LHP_init_puzzle ( &puzzle ) ;
-	LHP_PGen ( &puzzle , &param , str , len ) ;
+	LHP_PGen ( &puzzle , &param , str) ;
 	SUCCESS ( "Gen" ) ;
 }
 
@@ -28,6 +28,7 @@ void btlp::solvetlp ()
 	LHP_PSolve ( &param , &puzzle , &solution ) ;
 	mpz_t num ;
 	mpz_init_set_ui ( num , 0 ) ;
+	int len = str.size();
 	for( int i = 0 ; i < len ; i++ ) {
 		mpz_mul_ui ( num , num , 1 << 8 ) ;
 		mpz_add_ui ( num , num , (uint8_t)str[i] ) ;
@@ -48,6 +49,7 @@ void btlp::batchtlp ()
 	// Preparing for Experiment 4
 	mpz_t num ;
 	mpz_init_set_ui ( num , 0 ) ;
+	int len = str.size();
 	for( int i = 0 ; i < len ; i++ ) {
 		mpz_mul_ui ( num , num , 1 << 8 ) ;
 		mpz_add_ui ( num , num , (uint8_t)str[i] ) ;
@@ -55,7 +57,7 @@ void btlp::batchtlp ()
 	LHP_init_puzzle ( &dest_puzzle ) ;
 	for ( int i = 0 ; i < n ; i ++ ) {
 		LHP_init_puzzle ( puzzle_array + i ) ;
-		LHP_PGen ( puzzle_array + i , &param , str, len ) ;
+		LHP_PGen ( puzzle_array + i , &param , str) ;
 	}
 	LHP_PEval ( &param , puzzle_array , n , &dest_puzzle ) ;
 	LHP_PSolve ( &param , &dest_puzzle , &solution ) ;

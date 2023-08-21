@@ -15,7 +15,8 @@
 void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 	uint64_t lambda , uint64_t ) ;
 
-void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , unsigned char* , size_t ) ;
+// void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , unsigned char* , size_t ) ;
+void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , string str);
 
 void LHP_PGen_seeded ( LHP_puzzle_t* puzzle , 
 		LHP_param_t* pp , 

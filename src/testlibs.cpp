@@ -21,11 +21,7 @@ using namespace mcl::bn;
 
 // Experimental Parameters
 int n = 200 ;
-unsigned char* str = (unsigned char*)"111111111111111111111"
-	"11111111111111111111111111111"
-	"11111111111111111111111111111"
-	"111111111111111111111" ;
-int len = 100 ;
+string str = "111";
 
 /* Some variables to declare */
 LHP_param_t param ;
@@ -94,7 +90,7 @@ static void SETUP_TEST ()
 static void GEN_TEST ()
 {
 	LHP_init_puzzle ( &puzzle ) ;
-	LHP_PGen ( &puzzle , &param , str , len ) ;
+	LHP_PGen ( &puzzle , &param , str) ;
 	SUCCESS ( "Gen" ) ;
 }
 
@@ -104,11 +100,14 @@ static void SOLVE_TEST ()
 	mpz_init ( solution .s ) ;
 	LHP_PSolve ( &param , &puzzle , &solution ) ;
 	mpz_t num ;
-	mpz_init_set_ui ( num , 0 ) ;
-	for( int i = 0 ; i < len ; i++ ) {
-		mpz_mul_ui ( num , num , 1 << 8 ) ;
-		mpz_add_ui ( num , num , (uint8_t)str[i] ) ;
-	}
+	mpz_init(num);
+    mpz_set_str(num, str.c_str(), 10);
+	// mpz_init_set_ui ( num , 0 ) ;
+	// int len = str.size();
+	// for( int i = 0 ; i < len ; i++ ) {
+	// 	mpz_mul_ui ( num , num , 1 << 8 ) ;
+	// 	mpz_add_ui ( num , num , (uint8_t)str[i] ) ;
+	// }
 	if ( mpz_cmp ( num , solution .s ) == 0 ) {
 		SUCCESS ( "Solver" ) ;
 	}
@@ -123,15 +122,13 @@ static void BATCH_TEST ()
 {
 	// Preparing for Experiment 4
 	mpz_t num ;
-	mpz_init_set_ui ( num , 0 ) ;
-	for( int i = 0 ; i < len ; i++ ) {
-		mpz_mul_ui ( num , num , 1 << 8 ) ;
-		mpz_add_ui ( num , num , (uint8_t)str[i] ) ;
-	}
+	mpz_init(num);
+    mpz_set_str(num, str.c_str(), 10);
+    
 	LHP_init_puzzle ( &dest_puzzle ) ;
 	for ( int i = 0 ; i < n ; i ++ ) {
 		LHP_init_puzzle ( puzzle_array + i ) ;
-		LHP_PGen ( puzzle_array + i , &param , str, len ) ;
+		LHP_PGen ( puzzle_array + i , &param , str) ;
 	}
 	LHP_PEval ( &param , puzzle_array , n , &dest_puzzle ) ;
 	LHP_PSolve ( &param , &dest_puzzle , &solution ) ;
@@ -260,10 +257,35 @@ void testmcl() {
 
     // cout << "Plaintext: " << plaintext << endl;
 }
+void testgmp() {
+    const char* num1Str = "23897102878690413305191302092546677624011637124451414656172074653561492208238";
+    const char* num2Str = "27841012422131426519476849700634573104435441904749167517298484148522579403538";
+
+    mpz_t num1, num2, result;
+    mpz_init(num1);
+    mpz_init(num2);
+    mpz_init(result);
+
+    mpz_set_str(num1, num1Str, 10);
+    mpz_set_str(num2, num2Str, 10);
+
+    // Perform addition
+    mpz_add(result, num1, num2);
+
+    // Print the result
+    gmp_printf("Result: %Zd\n", result);
+
+    // Clean up
+    mpz_clear(num1);
+    mpz_clear(num2);
+    mpz_clear(result);
+
+    return;
+}
 
 int main ( int argc , char* argv[] )
 {
-	// testlhtlp();
+	testlhtlp();
 	
 	// testkhprf();
 
@@ -276,37 +298,23 @@ int main ( int argc , char* argv[] )
 	// testbtlp.cleantlp();
 
 	// testmcl();
-
+	// testgmp();
 	initpairing();
 	cobtlp testcobtlp;
 	testcobtlp.initialize(10,1000000);
-	// string str1 = "yes1";
-	// string str2 = "yes2";
-	// string str3 = "yes3";
-	// G1 g1;
-	// G2 g2;
-	// getpairing(g1,g2);
 
 	GT randgt1;
 	getrandGT(randgt1);
 
-	// GT randgt2;
-	// getrandGT(randgt2);
+	GT randgt2;
+	getrandGT(randgt2);
 
-	// GT randgt3;
-	// getrandGT(randgt3);
-	// cout << randgt << "\n";
-
-	// const G1& generatorG1 = G1::getGenerator(); // Get the generator of G1
-    // const G2& generatorG2 = G2::getGenerator(); // Get the generator of G2
 	testcobtlp.gentlp(1,randgt1);
-	// testcobtlp.gentlp(2,randgt2);
+	testcobtlp.gentlp(2,randgt1);
 
+	// testcobtlp.solvetlp(1);
 	testcobtlp.solvetlp(1);
-	// testcobtlp.solvetlp(2);
-
-	// testcobtlp.gentlp(3,randgt3);
-	// testcobtlp.gentlp(2,str2);
-	// testcobtlp.gentlp(3,str3);
+	testcobtlp.solvetlp(2);
+	testcobtlp.batchsolvetlp();
 	return 0;
 }
