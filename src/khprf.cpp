@@ -4,27 +4,6 @@
 void khprf::setup(int sz) {
     // Initialize MCL library
     n = sz;
-    // initPairing(mcl::BLS12_381);
-    // // if (initPairing(mcl::BLS12_381) != 0) {
-    // //     cout << "Failed to initialize MCL library!" << endl;
-    // //     return;
-    // // }
-
-    // // If you want to use the same BLS12-381 generator as [zkcrypto](https://www.ietf.org/archive/id/draft-irtf-cfrg-pairing-friendly-curves-11.html#section-4.2.1) then,
-
-	// G1 P;
-	// bool check;
-	// const char *g1Str = "1 0x17f1d3a73197d7942695638c4fa9ac0fc3688c4f9774b905a14e3a3f171bac586c55e83ff97a1aeffb3af00adb22c6bb 0x08b3f481e3aaa0f1a09e30ed741d8ae4fcf5e095d5d00af600db18cb2c04b3edd03cc744a2888ae40caa232946c5e7e1";
-	// P.setStr(&check,g1Str, 16);
-
-	// G2 Q;
-	// const char *g2Str = "1 0x24aa2b2f08f0a91260805272dc51051c6e47ad4fa403b02b4510b647ae3d1770bac0326a805bbefd48056c8c121bdb8 0x13e02b6052719f607dacd3a088274f65596bd0d09920b61ab5da61bbdc7f5049334cf11213945d57e5ac7d055d042b7e 0x0ce5d527727d6e118cc9cdc6da2e351aadfd9baa8cbdd3a76d429a695160d12c923ac9cc3baca289e193548608b82801 0x0606c4a02ea734cc32acd2b02bc28b99cb3e287e85a763af267492ab572e99ab3f370d275cec1da1aaa9075ff05f79be";
-	// Q.setStr(&check,g2Str,16);
-
-    // GT tempgt;
-    // pairing(tempgt,P,Q);
-    // cout<<tempgt<<" is temporary pairing operation\n";
-    // Generate a random element x in the order of the asymmetric group
 
     G1 P;
     G2 Q;
@@ -72,12 +51,12 @@ void khprf::print() {
 
 void khprf::setkey() {
     key.setByCSPRNG();
-    // cout<<"key is "<<key<<"\n";
-
-    stringstream ss;
-    ss << key;
-    string keystr = ss.str();
-    // keylen = (keystr.size() * 4) / 3 + 1; // An approximate size for base 256 
+}
+void khprf::setkey(Fr &key2) {
+    key = key2;
+}
+void khprf::setpunckey(G1 &punckey2) {
+    punckey = punckey2;
 }
 
 string khprf::getkey() {
@@ -86,11 +65,9 @@ string khprf::getkey() {
     return ss.str();
 }
 
-int khprf::getkeylen() {
-    return keylen;
-}
-void khprf::clearkey() {
+void khprf::clearkeys() {
     key.clear();
+    punckey.clear();
 }
 
 void khprf::prfeval(GT &result, int i) {

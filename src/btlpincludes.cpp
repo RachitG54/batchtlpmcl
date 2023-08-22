@@ -39,7 +39,10 @@ void getrandGT(GT &randgt) {
   GT::pow(randgt,gt,x);
 }
 
-
+void printmpz(mpz_t &num) {
+  char *tmp = mpz_get_str(NULL,10,num);
+  cout << "Printed mpz integer "<<tmp<<"\n";
+}
 
 
 

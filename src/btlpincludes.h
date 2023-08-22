@@ -47,6 +47,7 @@ void handleErrors(string s);
 // void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize);
 // string convertToBase10String(const unsigned char* byteBuffer, size_t bufferSize);
 // void printinbase10(mpz_t &num);
+void printmpz(mpz_t &num);
 void initpairing();
 void getpairing(G1 &P, G2 &Q);
 void getrandGT(GT &randgt);

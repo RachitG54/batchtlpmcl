@@ -4,19 +4,19 @@
 #include "btlpincludes.h"
 
 class khprf {
-private:
+public:
     vector<G1> g1;
     vector<G2> g2;
     int n;
     Fr key;
     G1 punckey;
-    int keylen;
-public:
+// public:
 	void setup(int sz);
 	void setkey();
+	void setkey(Fr &key2);
+	void setpunckey(G1 &punckey2);
 	string getkey();
-	int getkeylen();
-	void clearkey();
+	void clearkeys();
 	void prfeval(GT &result, int i);
 	void puncture(int i);
 	void punceval(GT &result, int punci, int i);

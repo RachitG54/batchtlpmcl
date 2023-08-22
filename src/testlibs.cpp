@@ -124,7 +124,7 @@ static void BATCH_TEST ()
 	mpz_t num ;
 	mpz_init(num);
     mpz_set_str(num, str.c_str(), 10);
-    
+
 	LHP_init_puzzle ( &dest_puzzle ) ;
 	for ( int i = 0 ; i < n ; i ++ ) {
 		LHP_init_puzzle ( puzzle_array + i ) ;
@@ -232,9 +232,17 @@ void testmcl() {
     Fr x;
     x.setByCSPRNG();
 
-    GT testpow;
-    GT::pow(testpow,gt,x);
+    // GT testpow;
+    // GT::pow(testpow,gt,x);
 
+    cout << x << " is value\n";
+    stringstream ss;
+    ss << x;
+    string xstr = ss.str();
+    cout << xstr << " is serialized\n";
+
+    Fr x2(xstr);
+    cout << x2<<"\n";
     // GT y;
 
     // G1 a;
@@ -275,6 +283,10 @@ void testgmp() {
     // Print the result
     gmp_printf("Result: %Zd\n", result);
 
+    char * tmp = mpz_get_str(NULL,10,num1);
+
+    Fr x(tmp);
+    cout << x << "\n";
     // Clean up
     mpz_clear(num1);
     mpz_clear(num2);
@@ -285,7 +297,7 @@ void testgmp() {
 
 int main ( int argc , char* argv[] )
 {
-	testlhtlp();
+	// testlhtlp();
 	
 	// testkhprf();
 
@@ -299,22 +311,51 @@ int main ( int argc , char* argv[] )
 
 	// testmcl();
 	// testgmp();
+
 	initpairing();
 	cobtlp testcobtlp;
 	testcobtlp.initialize(10,1000000);
 
-	GT randgt1;
-	getrandGT(randgt1);
+	int test = 10;
+	vector<GT> randgt(test+1);
+	vector<GT> solvegt(test+1);
+	vector<GT> batchsolvegt(test+1);
 
-	GT randgt2;
-	getrandGT(randgt2);
+	vi testarr;
+	REP(i,1,test) {
+		getrandGT(randgt[i]);
+		// cout << "test " << i << ": " << randgt[i] << "\n";
+		testcobtlp.gentlp(i,randgt[i]);
+		testarr.pb(i);
+	}
 
-	testcobtlp.gentlp(1,randgt1);
-	testcobtlp.gentlp(2,randgt1);
+	cout <<"Gen done.\n" ;
 
-	// testcobtlp.solvetlp(1);
-	testcobtlp.solvetlp(1);
-	testcobtlp.solvetlp(2);
-	testcobtlp.batchsolvetlp();
+	// cout<<"\n\n\n";
+
+	REP(i,1,test) {
+		testcobtlp.solvetlp(i,solvegt[i]);
+	}
+
+	REP(i,1,test) {
+		if(solvegt[i] != randgt[i]) {
+			cerr << "Solve test "<<i<<" failed.\n";
+		}
+	}
+
+	cout <<"Solve done.\n" ;
+	// cout<<"\n\n\n";
+
+	testcobtlp.batchsolvetlp(testarr,batchsolvegt);
+	// testcobtlp.batchsolvetlp(testarr,batchsolvegt);
+
+	REP(i,1,test) {
+		if(batchsolvegt[i] != randgt[i]) {
+			cerr << "Batch Solve test "<<i<<" failed.\n";
+		}
+	}
+
+	cout <<"Batch solve done.\n" ;
+	testcobtlp.cleantlp();
 	return 0;
 }

@@ -22,8 +22,10 @@ public:
 	void initialize(int number, uint64_t t);
 	// void setuptlp(int number, int i, uint64_t t);
 	void gentlp(int i, GT &gtelt);
-	void solvetlp(int i);
-	void batchsolvetlp();
+	// int gettlpidx(int i);
+	void solvetlp(int idx, GT &result);
+	//Assuming we take in an index of values for setS
+	void batchsolvetlp(vi &setS, vector<GT> &result);
 	void cleantlp(int i);
 	void cleantlp();
 	// void copypp();
