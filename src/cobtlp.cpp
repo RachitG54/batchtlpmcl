@@ -31,7 +31,7 @@ void cobtlp::gentlp(int i, GT &gtelt) {
     btlparray[i].T = T;
     btlparray[i].slot = i;
     btlparray[i].prf.punckey = prf.punckey;
-    btlparray[i].prf.key = prf.key;
+    // btlparray[i].prf.key = prf.key;
 
     btlparray[i].puzzle_ptr = new LHP_puzzle_t;
 	LHP_init_puzzle ( btlparray[i].puzzle_ptr) ;
@@ -52,6 +52,39 @@ void cobtlp::gentlp(int i, GT &gtelt) {
 	// cout <<"Gen done.\n" ;
 }
 
+void cobtlp::gentlp(GT &gtelt, classbtlp &tlpinst) {
+	if(tlpinst.slot > n) {
+		handleErrors("Setting incorrect slot number.");
+	}
+	int i = tlpinst.slot;
+
+    // classbtlp bltpinst;
+
+    prf.setkey();
+    prf.puncture(i);
+    string keystr = prf.getkey();
+
+    tlpinst.n = n;
+    tlpinst.T = T;
+    tlpinst.slot = i;
+    tlpinst.prf.punckey = prf.punckey;
+    // btlparray[i].prf.key = prf.key;
+
+    tlpinst.puzzle_ptr = new LHP_puzzle_t;
+	LHP_init_puzzle ( tlpinst.puzzle_ptr) ;
+	/*
+	Check encoding is possible or not, it is fine for our current implementation because perfect correctness and l is one and we're mapping Z_p* to
+	an element in the time lock puzzle.
+	*/
+
+	LHP_PGen ( tlpinst.puzzle_ptr , &param , keystr) ;
+
+	GT evalGT;
+	prf.prfeval(evalGT, i);
+
+	GT::mul(tlpinst.ctpad,evalGT,gtelt);
+    prf.clearkeys();
+}
 
 // int cobtlp::gettlpidx(int i) {
 // 	REP(j,0,btlparray.size()-1) {
@@ -83,6 +116,31 @@ void cobtlp::solvetlp (int idx, GT &result)
 	sumkey.clear();
 	sumkeyeval.clear();
 	mpz_clear(btlparray[idx].solution.s);
+
+}
+
+void cobtlp::solvetlp(GT &result, classbtlp &tlpinst)
+{
+	if(tlpinst.puzzle_ptr == NULL) {
+		cerr << "Solving an uninitialized puzzle\n";
+		return;
+	}
+	mpz_init (tlpinst.solution.s ) ;
+	LHP_PSolve ( &param , tlpinst.puzzle_ptr , &tlpinst.solution ) ;
+
+	Fr sumkey;
+	sumkey.setStr(mpz_get_str(NULL, 10, tlpinst.solution.s), 10);
+	prf.setkey(sumkey);
+
+	int idx = tlpinst.slot;
+	GT sumkeyeval;
+	prf.prfeval(sumkeyeval,idx);
+
+
+	GT::div(result,tlpinst.ctpad,sumkeyeval);
+	sumkey.clear();
+	sumkeyeval.clear();
+	mpz_clear(tlpinst.solution.s);
 
 }
 
@@ -252,6 +310,88 @@ void cobtlp::batchsolvetlp (vi &setS, vector<GT> &result)
 	// }
 	// mpz_clear (num) ;
 }
+
+void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
+{
+	int sz = batcharray.size();
+	LHP_puzzle_t *puzzle_array = new LHP_puzzle_t[sz];
+
+	REP(i,0,batcharray.size()-1) {
+		if(batcharray[i].puzzle_ptr == NULL) {
+			cerr << "Not expecting to batch uninitialized puzzles.\n";
+			abort();
+		}
+		else if(batcharray[i].puzzle_ptr != NULL) {
+			puzzle_array[i] = *(batcharray[i].puzzle_ptr);
+		}
+	}
+
+	cout << "Batching " << sz << " things.\n";
+	if (sz == 0) {
+		return;
+	}
+
+	LHP_puzzle_t dest_puzzle;
+	LHP_init_puzzle ( &dest_puzzle ) ;
+	LHP_PEval ( &param , puzzle_array , sz , &dest_puzzle ) ;
+
+
+	LHP_puzzle_sol_t solution ;
+	mpz_init (solution.s ) ;
+	LHP_PSolve ( &param , &dest_puzzle , &solution ) ;
+
+	string frstr = Fr::getModulo();//.getStr(10);
+	mpz_t orderf;
+	mpz_init(orderf) ;
+    mpz_set_str(orderf, frstr.c_str(), 10);
+
+    mpz_mod(solution.s, solution.s, orderf);
+
+	Fr sumkey;
+	sumkey.setStr(mpz_get_str(NULL, 10, solution.s), 10);
+	// cout << sumkey << " sumkey is executed\n";
+
+	REP(i,0,sz-1) {
+		prf.setkey(sumkey);
+
+		GT sumkeyeval;
+		int curridx = batcharray[i].slot;
+		prf.prfeval(sumkeyeval,curridx);
+		// cout <<"sumkey is "<< sumkey << "\nsumkeyeval is "<<sumkeyeval<<"\n\n\n";
+
+		GT intval(batcharray[i].ctpad);
+		REP(j,0,sz-1) {
+			int iteridx = batcharray[j].slot;
+			if (iteridx == curridx) continue;
+
+			// cout <<"This shouldn't get executed.\n";
+			prf.setpunckey(batcharray[j].prf.punckey);
+			GT compval;
+			prf.punceval(compval,j,i);
+
+			GT::mul(intval,intval,compval);
+			// cout << "Computed "<<j<<" punctured eval.\n";
+			// compval.clear();
+		}
+		GT::div(intval,intval,sumkeyeval);
+		result[i] = intval;
+		// cout << "batch solve test " << curridx << ": " << result[i] << "\n\n\n";
+
+		// intval.clear();
+		sumkeyeval.clear();
+	}
+
+	sumkey.clear();
+
+	mpz_clear(solution.s) ;
+	mpz_clear(orderf);
+
+	free(puzzle_array);
+
+	LHP_clear_puzzle (&dest_puzzle) ;
+}
+
+
 // Cleans the tlp
 void cobtlp::cleantlp (int i)
 {
@@ -268,6 +408,19 @@ void cobtlp::cleantlp (int i)
 	// LHP_clear_param ( &param ) ;
 	// free ( puzzle_array ) ;
 }
+
+// Cleans the tlp
+void cobtlp::cleantlp (vector<classbtlp> &batcharray)
+{
+	int sz = batcharray.size();
+	REP(i,0,sz-1) {
+		if (batcharray[i].puzzle_ptr!=NULL) {
+			LHP_clear_puzzle ( batcharray[i].puzzle_ptr);
+			batcharray[i].prf.clearkeys();
+		}
+	}
+}
+
 
 void cobtlp::cleantlp ()
 {

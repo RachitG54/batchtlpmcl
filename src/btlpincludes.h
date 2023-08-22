@@ -5,11 +5,11 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <sys/time.h>
-#include <sys/time.h>
 #include <gmp.h>
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <queue>
 #include <mcl/bls12_381.hpp>
 #include <openssl/sha.h>
 
