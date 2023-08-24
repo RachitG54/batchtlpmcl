@@ -14,6 +14,7 @@
 #include "khprf.h"
 #include "btlp.h"
 #include "cobtlp.h"
+#include "uncobtlp.h"
 
 // #define SEC_PARAM 1024
 
@@ -295,12 +296,7 @@ void testgmp() {
     return;
 }
 
-int main ( int argc , char* argv[] )
-{
-	// testlhtlp();
-	
-	// testkhprf();
-
+void testbtlpfn() {
 	// btlp testbtlp;
 	// testbtlp.initialize(10);
 	// testbtlp.setuptlp(1000000);
@@ -308,11 +304,9 @@ int main ( int argc , char* argv[] )
 	// testbtlp.solvetlp();
 	// testbtlp.batchtlp();
 	// testbtlp.cleantlp();
+}
 
-	// testmcl();
-	// testgmp();
-
-	initpairing();
+void testcobtlpfn() {
 	cobtlp testcobtlp;
 	testcobtlp.initialize(10,1000000);
 
@@ -357,5 +351,127 @@ int main ( int argc , char* argv[] )
 
 	cout <<"Batch solve done.\n" ;
 	testcobtlp.cleantlp();
+}
+
+void testcobtlpfnarg() {
+	cobtlp testcobtlp;
+	testcobtlp.initialize(10,1000000);
+
+	int test = 10;
+	vector<GT> randgt(test+1);
+	vector<GT> solvegt(test+1);
+	vector<GT> batchsolvegt(test+1);
+
+	vector<classbtlp> batcharray(test);
+
+	// vi testarr;
+	REP(i,1,test) {
+		getrandGT(randgt[i]);
+		// cout << "test " << i << ": " << randgt[i] << "\n";
+		batcharray[i-1].slot = i;
+		testcobtlp.gentlp(randgt[i],batcharray[i-1]);
+		// cout << batcharray[i-1].slot << " is the slot\n";
+		// testarr.pb(i);
+	}
+
+	cout <<"Gen done.\n" ;
+
+	// cout<<"\n\n\n";
+
+	REP(i,1,test) {
+		testcobtlp.solvetlp(solvegt[i],batcharray[i-1]);
+	}
+
+	REP(i,1,test) {
+		if(solvegt[i] != randgt[i]) {
+			cerr << "Solve test "<<i<<" failed.\n";
+		}
+	}
+
+	cout <<"Solve done.\n" ;
+	// cout<<"\n\n\n";
+
+	testcobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	// testcobtlp.batchsolvetlp(testarr,batchsolvegt);
+
+	REP(i,1,test) {
+		if(batchsolvegt[i-1] != randgt[i]) {
+			cerr << "Batch Solve test "<<i<<" failed.\n";
+			cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+		}
+	}
+
+	cout <<"Batch solve done.\n" ;
+	testcobtlp.cleantlp(batcharray);
+}
+
+void testuncobtlpfn() {
+	uncobtlp testuncobtlp;
+	int n_left = 10;
+	int n_right = 20;
+	int deg = 4;
+	int timeT = 1000000;
+
+	testuncobtlp.initialize(n_left,n_right,deg,timeT);
+
+	int test = n_left;
+	vector<GT> randgt(test+1);
+	vector<GT> solvegt(test+1);
+	vector<GT> batchsolvegt(test+1);
+
+	vector<classuncobtlp> batcharray(test);
+
+	// vi testarr;
+	REP(i,1,test) {
+		getrandGT(randgt[i]);
+		// cout << "test " << i << ": " << randgt[i] << "\n";
+		// batcharray[i-1].slot = i;
+		testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
+		// cout << batcharray[i-1].slot << " is the slot\n";
+		// testarr.pb(i);
+	}
+
+	cout <<"Gen done.\n" ;
+
+	// // cout<<"\n\n\n";
+
+	REP(i,1,test) {
+		testuncobtlp.solvetlp(solvegt[i],batcharray[i-1]);
+	}
+
+	REP(i,1,test) {
+		if(solvegt[i] != randgt[i]) {
+			cerr << "Solve test "<<i<<" failed.\n";
+		}
+	}
+
+	cout <<"Solve done.\n" ;
+	// // cout<<"\n\n\n";
+
+	// testcobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	// // testcobtlp.batchsolvetlp(testarr,batchsolvegt);
+
+	// REP(i,1,test) {
+	// 	if(batchsolvegt[i-1] != randgt[i]) {
+	// 		cerr << "Batch Solve test "<<i<<" failed.\n";
+	// 		cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+	// 	}
+	// }
+
+	// cout <<"Batch solve done.\n" ;
+	// testcobtlp.cleantlp(batcharray);
+}
+
+int main ( int argc , char* argv[] )
+{
+	// testlhtlp();
+	// testkhprf();
+	// testmcl();
+	// testgmp();
+
+	initpairing();
+	testuncobtlpfn();
+
+	
 	return 0;
 }

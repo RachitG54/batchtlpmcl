@@ -240,75 +240,6 @@ void cobtlp::batchsolvetlp (vi &setS, vector<GT> &result)
 	// }
 
 	LHP_clear_puzzle (&dest_puzzle) ;
-
-	// cout<<"Testing time.\n\n\n";
-	// prf.setkey(sumkey);
-	// GT testkeyeval;
-	// prf.prfeval(testkeyeval,1);
-
-	// cout <<"sumkeyeval is "<<testkeyeval<<"\n";
-
-	// prf.setkey(btlparray[1].prf.key);
-	// GT testeval1;
-	// prf.prfeval(testeval1,1);
-
-
-	// prf.setkey(btlparray[2].prf.key);
-	// GT testeval2;
-	// prf.prfeval(testeval2,1);
-
-	// GT resgt;
-	// GT::mul(resgt,testeval1,testeval2);
-	// cout << "result should match "<<resgt<<"\n\n\n";
-
-	// LHP_puzzle_sol_t solution1 ;
-	// mpz_init (solution1.s ) ;
-	// LHP_PSolve ( &param , &puzzle_array[0] , &solution1 ) ;
-
-	// LHP_puzzle_sol_t solution2 ;
-	// mpz_init (solution2.s ) ;
-	// LHP_PSolve ( &param , &puzzle_array[1] , &solution2 ) ;
-
-
-	// gmp_printf("Result: %Zd\n", solution1.s);
-	// gmp_printf("Result: %Zd\n", solution2.s);
-
-	// mpz_t result;
-	// mpz_init_set_ui(result,0);
-	// mpz_add(result,solution1.s,solution2.s);
-
-
-	// gmp_printf("Result: %Zd\n", result);
-	// gmp_printf("Result: %Zd\n", solution.s);
-
-	// printinbase10(result);
-	// printinbase10(solution.s);
-
-	// if ( mpz_cmp ( result , solution .s ) == 0 ) {
-	// 	SUCCESS ( "Batch" ) ;
-	// }
-	// else {
-	// 	FAILED ( "Batch" ) ;
-	// }
-
-	// // LHP_puzzle_sol_t solution ;
-
-	// // mpz_init ( solution .s ) ;
-	// LHP_init_puzzle ( &dest_puzzle ) ;
-	// for ( int i = 0 ; i < n ; i ++ ) {
-	// 	LHP_init_puzzle ( puzzle_array + i ) ;
-	// 	LHP_PGen ( puzzle_array + i , &param , str, len ) ;
-	// }
-	// LHP_PEval ( &param , puzzle_array , n , &dest_puzzle ) ;
-	// LHP_PSolve ( &param , &dest_puzzle , &solution ) ;
-	// mpz_mul_ui ( num , num , n ) ;
-	// if ( mpz_cmp ( num , solution .s ) == 0 ) {
-	// 	SUCCESS ( "Batch" ) ;
-	// }
-	// else {
-	// 	FAILED ( "Batch" ) ;
-	// }
-	// mpz_clear (num) ;
 }
 
 void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
@@ -356,12 +287,14 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 
 		GT sumkeyeval;
 		int curridx = batcharray[i].slot;
+		// cout << curridx << " is curridx ";
 		prf.prfeval(sumkeyeval,curridx);
 		// cout <<"sumkey is "<< sumkey << "\nsumkeyeval is "<<sumkeyeval<<"\n\n\n";
 
 		GT intval(batcharray[i].ctpad);
 		REP(j,0,sz-1) {
 			int iteridx = batcharray[j].slot;
+			// cout << iteridx << " is iteridx ";
 			if (iteridx == curridx) continue;
 
 			// cout <<"This shouldn't get executed.\n";
@@ -373,6 +306,7 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 			// cout << "Computed "<<j<<" punctured eval.\n";
 			// compval.clear();
 		}
+		// cout << "\n";
 		GT::div(intval,intval,sumkeyeval);
 		result[i] = intval;
 		// cout << "batch solve test " << curridx << ": " << result[i] << "\n\n\n";
