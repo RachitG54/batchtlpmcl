@@ -479,8 +479,8 @@ int main ( int argc , char* argv[] )
 	initpairing();
 
 
-	testcobtlpfnarg();
-	// testuncobtlpfn();
+	// testcobtlpfnarg();
+	testuncobtlpfn();
 
 	
 	return 0;
