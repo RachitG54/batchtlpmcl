@@ -7,6 +7,7 @@
 #include "util.h"
 #include "puzzle.h"
 #include "khprf.h"
+#include "btlptime.h"
 
 using namespace std;
 

@@ -46,6 +46,24 @@ typedef unsigned char uchar;
 #define PRIME_ITERS 25
 #define SEC_PARAM 1024
 
+//these are the parameters we are storing for benchmarking
+
+extern double CRSgentime;
+extern double pairCRSgentime;
+extern double puzzleCRSgentime;
+extern double gentime;
+extern double pairgentime;
+extern double puzzlegentime;
+extern double solvetime;
+extern double pairsolvetime;
+extern double puzzlesolvetime;
+extern double batchsolvetime;
+extern double pairbatchsolvetime;
+extern double puzzlebatchsolvetime;
+extern double graphbatchsolvetime;
+extern ll CRSbytes;
+extern ll puzzlebytes;
+
 void handleErrors(string s);
 // void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize);
 // string convertToBase10String(const unsigned char* byteBuffer, size_t bufferSize);

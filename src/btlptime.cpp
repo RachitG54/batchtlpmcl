@@ -1,5 +1,19 @@
 #include "btlptime.h"
 
+btlptime timerCRSgentime;
+btlptime timerpairCRSgentime;
+btlptime timerpuzzleCRSgentime;
+btlptime timergentime;
+btlptime timerpairgentime;
+btlptime timerpuzzlegentime;
+btlptime timersolvetime;
+btlptime timerpairsolvetime;
+btlptime timerpuzzlesolvetime;
+btlptime timerbatchsolvetime;
+btlptime timerpairbatchsolvetime;
+btlptime timerpuzzlebatchsolvetime;
+btlptime timergraphbatchsolvetime;
+
 btlptime::btlptime() {
 	start = high_resolution_clock::now();
 	duration = duration_cast<microseconds>(start - start);

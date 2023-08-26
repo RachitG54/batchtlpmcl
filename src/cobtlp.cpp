@@ -5,13 +5,18 @@
 void cobtlp::initialize(int number, uint64_t t) {
 	n = number;
 	T = t;
-	
+
+	timerpuzzleCRSgentime.starttime();
 	LHP_init_param ( &param ) ;
 	LHP_PSetup ( &param , SEC_PARAM , T) ;
-	cout <<"LHP initialized.\n" ;
+	timerpuzzleCRSgentime.donetime();
+	// cout <<"LHP initialized.\n" ;
+
+	timerpairCRSgentime.starttime();
 	prf.setup(n);
+	timerpairCRSgentime.donetime();
 	btlparray.resize(n+1);
-	cout <<"PRF initialized.\n" ;
+	// cout <<"PRF initialized.\n" ;
 }
 
 void cobtlp::gentlp(int i, GT &gtelt) {
@@ -59,8 +64,13 @@ void cobtlp::gentlp(GT &gtelt, classbtlp &tlpinst) {
 	int i = tlpinst.slot;
     // classbtlp bltpinst;
 
+	timerpairgentime.starttime();
     prf.setkey();
     prf.puncture(i);
+	GT evalGT;
+	prf.prfeval(evalGT, i);
+	timerpairgentime.donetime();
+
     string keystr = prf.getkey();
 
     tlpinst.n = n;
@@ -69,6 +79,7 @@ void cobtlp::gentlp(GT &gtelt, classbtlp &tlpinst) {
     tlpinst.prf.punckey = prf.punckey;
     // btlparray[i].prf.key = prf.key;
 
+	timerpuzzlegentime.starttime();
     tlpinst.puzzle_ptr = new LHP_puzzle_t;
 	LHP_init_puzzle ( tlpinst.puzzle_ptr) ;
 	/*
@@ -78,10 +89,12 @@ void cobtlp::gentlp(GT &gtelt, classbtlp &tlpinst) {
 
 	LHP_PGen ( tlpinst.puzzle_ptr , &param , keystr) ;
 
-	GT evalGT;
-	prf.prfeval(evalGT, i);
+	timerpuzzlegentime.donetime();
 
+	timerpairgentime.starttime();
 	GT::mul(tlpinst.ctpad,evalGT,gtelt);
+	timerpairgentime.donetime();
+
     prf.clearkeys();
 }
 

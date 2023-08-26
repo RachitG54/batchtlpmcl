@@ -15,6 +15,7 @@
 #include "btlp.h"
 #include "cobtlp.h"
 #include "uncobtlp.h"
+#include "btlptime.h"
 
 // #define SEC_PARAM 1024
 
@@ -419,8 +420,14 @@ void testuncobtlpfn() {
 	int n_right = 20;
 	int deg = 5;
 	int timeT = 1000000;
+	int repeat = 1;
 
-	testuncobtlp.initialize(n_left,n_right,deg,timeT);
+	timerCRSgentime.starttime();
+	REP(j,0,repeat-1)
+		testuncobtlp.initialize(n_left,n_right,deg,timeT);
+	timerCRSgentime.donetime();
+
+	CRSgentime = timergentime.getTime();
 
 	int test = n_left;
 	vector<GT> randgt(test+1);
@@ -428,17 +435,28 @@ void testuncobtlpfn() {
 	vector<GT> batchsolvegt(test+1);
 
 	vector<classuncobtlp> batcharray(test);
-
-	// vi testarr;
 	REP(i,1,test) {
 		getrandGT(randgt[i]);
 		// cout << "test " << i << ": " << randgt[i] << "\n";
 		// batcharray[i-1].slot = i;
-		testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
+		timergentime.starttime();
+		REP(j,0,repeat-1)
+			testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
+		timergentime.donetime();
+
+		// cout << timergentime.getTime() <<" ";
+		// pairgentime += timerpairgentime.getTime();
+		// puzzlegentime += timerpuzzlegentime.getTime();
 		// cout << batcharray[i-1].slot << " is the slot\n";
 		// testarr.pb(i);
 	}
+	// cout<<"\n";
 
+	gentime = timergentime.getTime()/(repeat*test);
+	pairgentime = timerpairgentime.getTime()/(repeat*test);
+	puzzlegentime = timerpuzzlegentime.getTime()/(repeat*test);
+
+	cout << "Time taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
 	cout <<"Gen done.\n" ;
 
 	// // cout<<"\n\n\n";

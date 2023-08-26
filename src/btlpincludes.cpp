@@ -45,7 +45,21 @@ void printmpz(mpz_t &num) {
 }
 
 
-
+double CRSgentime = 0;
+double pairCRSgentime = 0;
+double puzzleCRSgentime = 0;
+double gentime = 0;
+double pairgentime = 0;
+double puzzlegentime = 0;
+double solvetime = 0;
+double pairsolvetime = 0;
+double puzzlesolvetime = 0;
+double batchsolvetime = 0;
+double pairbatchsolvetime = 0;
+double puzzlebatchsolvetime = 0;
+double graphbatchsolvetime = 0;
+ll CRSbytes = 0;
+ll puzzlebytes = 0;
 
 // void convertToByteString(const std::string& numberStr, unsigned char* byteBuffer, size_t bufferSize) {
 

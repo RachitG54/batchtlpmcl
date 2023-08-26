@@ -18,5 +18,19 @@ public:
 	void resetTime();
 	uint64_t getAndResetTime();
 };
-  
+
+extern btlptime timerCRSgentime;
+extern btlptime timerpairCRSgentime;
+extern btlptime timerpuzzleCRSgentime;
+extern btlptime timergentime;
+extern btlptime timerpairgentime;
+extern btlptime timerpuzzlegentime;
+extern btlptime timersolvetime;
+extern btlptime timerpairsolvetime;
+extern btlptime timerpuzzlesolvetime;
+extern btlptime timerbatchsolvetime;
+extern btlptime timerpairbatchsolvetime;
+extern btlptime timerpuzzlebatchsolvetime;
+extern btlptime timergraphbatchsolvetime;
+
 #endif // btlptime_H
