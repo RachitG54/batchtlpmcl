@@ -57,7 +57,7 @@ void cobtlp::gentlp(GT &gtelt, classbtlp &tlpinst) {
 		handleErrors("Setting incorrect slot number.");
 	}
 	int i = tlpinst.slot;
-
+	cout << "i is slot "<< i <<"\n";
     // classbtlp bltpinst;
 
     prf.setkey();
@@ -287,14 +287,14 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 
 		GT sumkeyeval;
 		int curridx = batcharray[i].slot;
-		// cout << curridx << " is curridx ";
+		cout << curridx << " is curridx ";
 		prf.prfeval(sumkeyeval,curridx);
 		// cout <<"sumkey is "<< sumkey << "\nsumkeyeval is "<<sumkeyeval<<"\n\n\n";
 
 		GT intval(batcharray[i].ctpad);
 		REP(j,0,sz-1) {
 			int iteridx = batcharray[j].slot;
-			// cout << iteridx << " is iteridx ";
+			cout << iteridx << " is iteridx ";
 			if (iteridx == curridx) continue;
 
 			// cout <<"This shouldn't get executed.\n";

@@ -364,12 +364,20 @@ void testcobtlpfnarg() {
 
 	vector<classbtlp> batcharray(test);
 
+	vector<classbtlp> batcharraytest;
+	vector<GT> randgttest;
+
 	// vi testarr;
 	REP(i,1,test) {
 		getrandGT(randgt[i]);
 		// cout << "test " << i << ": " << randgt[i] << "\n";
 		batcharray[i-1].slot = i;
 		testcobtlp.gentlp(randgt[i],batcharray[i-1]);
+		if(i%3 == 0) {
+			batcharraytest.pb(batcharray[i-1]);
+			randgttest.pb(randgt[i]);
+			cout << "including test "<<i<<" in my batching.\n";
+		}
 		// cout << batcharray[i-1].slot << " is the slot\n";
 		// testarr.pb(i);
 	}
@@ -391,13 +399,13 @@ void testcobtlpfnarg() {
 	cout <<"Solve done.\n" ;
 	// cout<<"\n\n\n";
 
-	testcobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	testcobtlp.batchsolvetlp(batchsolvegt,batcharraytest);
 	// testcobtlp.batchsolvetlp(testarr,batchsolvegt);
 
-	REP(i,1,test) {
-		if(batchsolvegt[i-1] != randgt[i]) {
+	REP(i,0,sz(randgttest)-1) {
+		if(batchsolvegt[i] != randgttest[i]) {
 			cerr << "Batch Solve test "<<i<<" failed.\n";
-			cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+			cout << batchsolvegt[i] << "\n\n\n" << randgttest[i] << "\nTest i done.\n\n";
 		}
 	}
 
@@ -409,7 +417,7 @@ void testuncobtlpfn() {
 	uncobtlp testuncobtlp;
 	int n_left = 10;
 	int n_right = 20;
-	int deg = 4;
+	int deg = 5;
 	int timeT = 1000000;
 
 	testuncobtlp.initialize(n_left,n_right,deg,timeT);
@@ -446,19 +454,18 @@ void testuncobtlpfn() {
 	}
 
 	cout <<"Solve done.\n" ;
-	// // cout<<"\n\n\n";
 
-	// testcobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	testuncobtlp.batchsolvetlp(batchsolvegt,batcharray);
 	// // testcobtlp.batchsolvetlp(testarr,batchsolvegt);
 
-	// REP(i,1,test) {
-	// 	if(batchsolvegt[i-1] != randgt[i]) {
-	// 		cerr << "Batch Solve test "<<i<<" failed.\n";
-	// 		cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
-	// 	}
-	// }
+	REP(i,1,test) {
+		if(batchsolvegt[i-1] != randgt[i]) {
+			cerr << "Batch Solve test "<<i<<" failed.\n";
+			cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+		}
+	}
 
-	// cout <<"Batch solve done.\n" ;
+	cout <<"Batch solve done.\n" ;
 	// testcobtlp.cleantlp(batcharray);
 }
 
@@ -470,7 +477,10 @@ int main ( int argc , char* argv[] )
 	// testgmp();
 
 	initpairing();
-	testuncobtlpfn();
+
+
+	testcobtlpfnarg();
+	// testuncobtlpfn();
 
 	
 	return 0;
