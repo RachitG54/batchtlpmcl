@@ -137,19 +137,22 @@ void cobtlp::solvetlp(GT &result, classbtlp &tlpinst)
 		cerr << "Solving an uninitialized puzzle\n";
 		return;
 	}
+
+	timerpuzzlesolvetime.starttime();
 	mpz_init (tlpinst.solution.s ) ;
 	LHP_PSolve ( &param , tlpinst.puzzle_ptr , &tlpinst.solution ) ;
+	timerpuzzlesolvetime.donetime();
 
+	timerpairsolvetime.starttime();
 	Fr sumkey;
 	sumkey.setStr(mpz_get_str(NULL, 10, tlpinst.solution.s), 10);
 	prf.setkey(sumkey);
-
 	int idx = tlpinst.slot;
 	GT sumkeyeval;
 	prf.prfeval(sumkeyeval,idx);
-
-
 	GT::div(result,tlpinst.ctpad,sumkeyeval);
+	timerpairsolvetime.donetime();
+
 	sumkey.clear();
 	sumkeyeval.clear();
 	mpz_clear(tlpinst.solution.s);
@@ -257,6 +260,12 @@ void cobtlp::batchsolvetlp (vi &setS, vector<GT> &result)
 void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 {
 	int sz = batcharray.size();
+	// cout << "Batching " << sz << " things.\n";
+	if (sz == 0) {
+		return;
+	}
+
+	timerpuzzlebatchsolvetime.starttime();
 	LHP_puzzle_t *puzzle_array = new LHP_puzzle_t[sz];
 
 	REP(i,0,batcharray.size()-1) {
@@ -269,11 +278,6 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 		}
 	}
 
-	cout << "Batching " << sz << " things.\n";
-	if (sz == 0) {
-		return;
-	}
-
 	LHP_puzzle_t dest_puzzle;
 	LHP_init_puzzle ( &dest_puzzle ) ;
 	LHP_PEval ( &param , puzzle_array , sz , &dest_puzzle ) ;
@@ -283,6 +287,10 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 	mpz_init (solution.s ) ;
 	LHP_PSolve ( &param , &dest_puzzle , &solution ) ;
 
+	timerpuzzlebatchsolvetime.donetime();
+
+
+	timerpairbatchsolvetime.starttime();
 	string frstr = Fr::getModulo();//.getStr(10);
 	mpz_t orderf;
 	mpz_init(orderf) ;
@@ -326,6 +334,8 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 		// intval.clear();
 		sumkeyeval.clear();
 	}
+
+	timerpairbatchsolvetime.donetime();
 
 	sumkey.clear();
 

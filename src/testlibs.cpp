@@ -451,18 +451,14 @@ void testuncobtlpfn() {
 		// testarr.pb(i);
 	}
 	// cout<<"\n";
-
-	gentime = timergentime.getTime()/(repeat*test);
-	pairgentime = timerpairgentime.getTime()/(repeat*test);
-	puzzlegentime = timerpuzzlegentime.getTime()/(repeat*test);
-
-	cout << "Time taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
 	cout <<"Gen done.\n" ;
 
 	// // cout<<"\n\n\n";
 
 	REP(i,1,test) {
+		timersolvetime.starttime();
 		testuncobtlp.solvetlp(solvegt[i],batcharray[i-1]);
+		timersolvetime.donetime();
 	}
 
 	REP(i,1,test) {
@@ -473,7 +469,10 @@ void testuncobtlpfn() {
 
 	cout <<"Solve done.\n" ;
 
-	testuncobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	timerbatchsolvetime.starttime();
+	REP(j,0,repeat-1)
+		testuncobtlp.batchsolvetlp(batchsolvegt,batcharray);
+	timerbatchsolvetime.donetime();
 	// // testcobtlp.batchsolvetlp(testarr,batchsolvegt);
 
 	REP(i,1,test) {
@@ -484,6 +483,28 @@ void testuncobtlpfn() {
 	}
 
 	cout <<"Batch solve done.\n" ;
+
+	CRSgentime = timerCRSgentime.getTime()/(repeat);
+	pairCRSgentime = timerpairCRSgentime.getTime()/(repeat);
+	puzzleCRSgentime = timerpuzzleCRSgentime.getTime()/(repeat);
+
+	gentime = timergentime.getTime()/(repeat*test);
+	pairgentime = timerpairgentime.getTime()/(repeat*test);
+	puzzlegentime = timerpuzzlegentime.getTime()/(repeat*test);
+
+	solvetime = timersolvetime.getTime()/(test);
+	pairsolvetime = timerpairsolvetime.getTime()/(test);
+	puzzlesolvetime = timerpuzzlesolvetime.getTime()/(test);
+
+	batchsolvetime = timerbatchsolvetime.getTime()/(repeat);
+	pairbatchsolvetime = timerpairbatchsolvetime.getTime()/(repeat);
+	puzzlebatchsolvetime = timerpuzzlebatchsolvetime.getTime()/(repeat);
+	graphbatchsolvetime = timergraphbatchsolvetime.getTime()/(repeat);
+
+	cout << "Time CRS taken is "<<CRSgentime<<" "<<pairCRSgentime<<" "<<puzzleCRSgentime<<" "<<"\n";
+	cout << "Time gen taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
+	cout << "Time solve taken is "<<solvetime<<" "<<pairsolvetime<<" "<<puzzlesolvetime<<" "<<"\n";
+	cout << "Time batchsolve taken is "<<batchsolvetime<<" "<<pairbatchsolvetime<<" "<<puzzlebatchsolvetime<<" "<<graphbatchsolvetime<<" "<<"\n";
 	// testcobtlp.cleantlp(batcharray);
 }
 
