@@ -231,20 +231,48 @@ void testmcl() {
 	GT gt;
     pairing(gt, P,Q);
 
-    Fr x;
-    x.setByCSPRNG();
+    // cout << mclBn_getG1ByteSize() << "\n";
+    cout << Fr::getByteSize() << "\n";
+    cout << G1::getSerializedByteSize() << "\n";
+    cout << G2::getSerializedByteSize() << "\n";
 
-    // GT testpow;
-    // GT::pow(testpow,gt,x);
+    char serG1[1000];
+    P.serialize(serG1,900);
+    string x = P.getStr();
+    // P.serialize(x);
+    cout << strlen(serG1) <<"\n";
+    cout << x << "\n";
 
-    cout << x << " is value\n";
-    stringstream ss;
-    ss << x;
-    string xstr = ss.str();
-    cout << xstr << " is serialized\n";
+    
+    // cout << GT::getSerializedByteSize() << "\n";
+    // cout << G2::getByteSize() << "\n";
+    // cout << GT::getByteSize() << "\n";
 
-    Fr x2(xstr);
-    cout << x2<<"\n";
+    Fr r;
+    r.setByCSPRNG();
+
+    GT testpow;
+    GT::pow(testpow,gt,r);
+
+	int testsz = testpow.serialize(serG1,900);
+    cout << testsz<<"\n";
+
+    testsz = P.serialize(serG1,900);
+    cout << testsz<<"\n";
+
+
+    testsz = Q.serialize(serG1,900);
+    cout << testsz<<"\n";
+
+    // cout << x << "\n";
+    // cout << x << " is value\n";
+    // stringstream ss;
+    // ss << x;
+    // string xstr = ss.str();
+    // cout << xstr << " is serialized\n";
+
+    // Fr x2(xstr);
+    // cout << x2<<"\n";
     // GT y;
 
     // G1 a;
@@ -414,11 +442,11 @@ void testcobtlpfnarg() {
 	testcobtlp.cleantlp(batcharray);
 }
 
-void testuncobtlpfn() {
+void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	uncobtlp testuncobtlp;
-	int n_left = 10;
-	int n_right = 20;
-	int deg = 5;
+	// int n_left = 10;
+	// int n_right = 20;
+	// int deg = 5;
 	int timeT = 1000000;
 	int repeat = 1;
 
@@ -428,6 +456,7 @@ void testuncobtlpfn() {
 	timerCRSgentime.donetime();
 
 	CRSgentime = timergentime.getTime();
+	CRSbytes = testuncobtlp.crsszbytes();
 
 	int test = n_left;
 	vector<GT> randgt(test+1);
@@ -443,6 +472,9 @@ void testuncobtlpfn() {
 		REP(j,0,repeat-1)
 			testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
 		timergentime.donetime();
+
+
+		puzzlebytes += batcharray[i-1].szbytes();
 
 		// cout << timergentime.getTime() <<" ";
 		// pairgentime += timerpairgentime.getTime();
@@ -500,11 +532,18 @@ void testuncobtlpfn() {
 	pairbatchsolvetime = timerpairbatchsolvetime.getTime()/(repeat);
 	puzzlebatchsolvetime = timerpuzzlebatchsolvetime.getTime()/(repeat);
 	graphbatchsolvetime = timergraphbatchsolvetime.getTime()/(repeat);
+	
+	puzzlebytes = puzzlebytes/(test);
 
-	cout << "Time CRS taken is "<<CRSgentime<<" "<<pairCRSgentime<<" "<<puzzleCRSgentime<<" "<<"\n";
-	cout << "Time gen taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
-	cout << "Time solve taken is "<<solvetime<<" "<<pairsolvetime<<" "<<puzzlesolvetime<<" "<<"\n";
-	cout << "Time batchsolve taken is "<<batchsolvetime<<" "<<pairbatchsolvetime<<" "<<puzzlebatchsolvetime<<" "<<graphbatchsolvetime<<" "<<"\n";
+	int N = n_left;
+
+	cout << "n_left	n_right	deg	timeT	CRSgentime	pairCRSgentime	puzzleCRSgentime	gentime	pairgentime	puzzlegentime	solvetime	pairsolvetime	puzzlesolvetime	batchsolvetime	pairbatchsolvetime	puzzlebatchsolvetime	graphbatchsolvetime	CRSbytes	puzzlebytes" << "\n";
+	cout << n_left << "\t" << n_right << "\t" << deg << "\t" << timeT << "\t" << CRSgentime << "\t" << pairCRSgentime << "\t" << puzzleCRSgentime << "\t" << gentime << "\t" << pairgentime << "\t" << puzzlegentime << "\t" << solvetime << "\t" << pairsolvetime << "\t" << puzzlesolvetime << "\t" << batchsolvetime << "\t" << pairbatchsolvetime << "\t" << puzzlebatchsolvetime << "\t" << graphbatchsolvetime << "\t" << CRSbytes << "\t" << puzzlebytes;
+	cout << "\n";
+	// cout << "Time CRS taken is "<<CRSgentime<<" "<<pairCRSgentime<<" "<<puzzleCRSgentime<<" "<<"\n";
+	// cout << "Time gen taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
+	// cout << "Time solve taken is "<<solvetime<<" "<<pairsolvetime<<" "<<puzzlesolvetime<<" "<<"\n";
+	// cout << "Time batchsolve taken is "<<batchsolvetime<<" "<<pairbatchsolvetime<<" "<<puzzlebatchsolvetime<<" "<<graphbatchsolvetime<<" "<<"\n";
 	// testcobtlp.cleantlp(batcharray);
 }
 
@@ -515,11 +554,18 @@ int main ( int argc , char* argv[] )
 	// testmcl();
 	// testgmp();
 
+
 	initpairing();
-
-
 	// testcobtlpfnarg();
-	testuncobtlpfn();
+	if(argc == 4) {
+		int n_left = atoi(argv[1]);
+		int n_right = atoi(argv[2]);
+		int degree = atoi(argv[3]);
+		testuncobtlpfn(n_left,n_right,degree);
+	}
+	else {
+		testuncobtlpfn();
+	}
 
 	
 	return 0;

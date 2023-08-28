@@ -44,6 +44,35 @@ void printmpz(mpz_t &num) {
   cout << "Printed mpz integer "<<tmp<<"\n";
 }
 
+// template<typename T>
+// ll getmclbytes(const T& x) {
+//   char ser[1000];
+//   ll sz = x.serialize(ser,1000); // returns size of punctured key
+//   return sz;
+// }
+
+ll getmclbytes(const G1& x) {
+  char ser[1000];
+  ll sz = x.serialize(ser,1000); // returns size of punctured key
+  return sz;
+}
+ll getmclbytes(const G2& x) {
+  char ser[1000];
+  ll sz = x.serialize(ser,1000); // returns size of punctured key
+  return sz;
+}
+ll getmclbytes(const GT& x) {
+  char ser[1000];
+  ll sz = x.serialize(ser,1000); // returns size of punctured key
+  return sz;
+}
+
+
+ll getmpzbytes(const mpz_t& x) {
+  size_t sizeInBits = mpz_sizeinbase(x, 2);
+  ll sz = (sizeInBits + 7) / 8;
+  return sz;
+}
 
 double CRSgentime = 0;
 double pairCRSgentime = 0;

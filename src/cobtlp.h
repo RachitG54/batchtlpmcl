@@ -33,6 +33,8 @@ public:
 	void cleantlp(int i);
 	void cleantlp(vector<classbtlp> &batcharray);
 	void cleantlp();
+
+	ll crsszbytes();
 	// void copypp();
 };
 

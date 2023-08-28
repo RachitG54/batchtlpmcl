@@ -73,6 +73,17 @@ void initpairing();
 void getpairing(G1 &P, G2 &Q);
 void getrandGT(GT &randgt);
 
+
+// template<typename T>
+// ll getmclbytes(const T& x);
+
+ll getmclbytes(const G1& x);
+ll getmclbytes(const G2& x);
+ll getmclbytes(const GT& x);
+
+ll getmpzbytes(const mpz_t& x);
+
+
 // uchar* readkeys(uint32_t &keylen, string keyname);
 // set<string> readset(string name);
 // void storeset(set<BIGNUM*> s, string name);

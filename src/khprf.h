@@ -21,6 +21,7 @@ public:
 	void puncture(int i);
 	void punceval(GT &result, int punci, int i);
 	void print();
+	// ll szbytes();
 };
 
 #endif // khprfdef

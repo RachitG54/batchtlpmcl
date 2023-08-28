@@ -347,6 +347,26 @@ void cobtlp::batchsolvetlp(vector<GT> &result, vector<classbtlp> &batcharray)
 	LHP_clear_puzzle (&dest_puzzle) ;
 }
 
+ll cobtlp::crsszbytes() {
+	// T, prf, param
+	ll sz = 0;
+	sz += 8; //for timeT
+	REP(i,0,prf.n) {
+		sz += getmclbytes(prf.g1[i]);
+	}
+	REP(i,0,2*n+1) {
+		if(i == n+1) {
+			// cout << getmclbytes(prf.g2[i]) << " should be empty.\n"; 
+			continue;
+		} 
+		sz += getmclbytes(prf.g2[i]);
+	}
+	sz += getmpzbytes(param.T);
+	sz += getmpzbytes(param.N);
+	sz += getmpzbytes(param.g);
+	sz += getmpzbytes(param.h);
+	return sz;
+}
 
 // Cleans the tlp
 void cobtlp::cleantlp (int i)

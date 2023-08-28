@@ -17,6 +17,7 @@ public:
 	// LHP_puzzle_t puzzle;
 	LHP_puzzle_sol_t solution;
 	GT ctpad;
+	ll szbytes();
 	classbtlp();
 	// classbtlp(int nValue, int slotValue, uint64_t TValue, const khprf& prfValue, const LHP_puzzle_t& puzzleValue, const LHP_puzzle_sol_t& solutionValue, const string& ctpadValue);
 	// ~classbtlp();

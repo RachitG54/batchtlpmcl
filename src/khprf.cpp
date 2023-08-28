@@ -88,3 +88,7 @@ void khprf::punceval(GT &result, int punci, int i) {
     }
     pairing(result, punckey,g2[n+1+i-punci]);
 }
+
+// ll khprf::szbytes() {
+//     return 0;
+// }
