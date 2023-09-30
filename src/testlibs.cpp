@@ -555,25 +555,25 @@ double logBinomialCoefficient(ll n, ll k) {
 
     // Calculate logarithmic value of [n*(n-1)*...*(n-k+1)] / [k*(k-1)*...*1]
     for (ll i = 0; i < k; ++i) {
-        result += log(n - i);
+        result += log2(n - i);
     }
 
     for (ll i = 0; i < k; ++i) {
-        result -= log(i + 1);
+        result -= log2(i + 1);
     }
 
     return result;
 }
 
-double evaluateExpression(ll n, ll q, int m, int d) {
+double evaluateExpression(ll n, ll q, int m, int d, int print = 0) {
     double result = 0.0;
 
     for (ll i = d+1; i <= n; ++i) {
-    	double eval = ((i * d *1.0) * log((i - 1.0) / m));
+    	double eval = ((i * d *1.0) * log2((i - 1.0) / m));
         double term = logBinomialCoefficient(q, i) +
                       logBinomialCoefficient(m, i - 1) + eval;
                       
-        // cout << term <<" "<<eval<<"\n";
+        // if(print == 1) cout << term <<" "<<eval<<"\n";
 
         result += term;
     }
@@ -581,26 +581,29 @@ double evaluateExpression(ll n, ll q, int m, int d) {
     return result;
 }
 
-int paramcomputer (ll n, ll q, ll m) {
+int paramcomputer (ll n, ll q, ll m, int print = 0) {
 
 	// can do binary search here, but already so efficient
-	REP(i,1,128) {
-	    double logResult = evaluateExpression(n, q, m, i);
-		    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
-	    if (logResult < -40.0) {
-		    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
-	    	return i;
-	    }
-	}
+	// REP(i,1,128) {
+	//     double logResult = evaluateExpression(n, q, m, i,print);
+	// 	    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	//     if (logResult < -40.0) {
+	// 	    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	//     	return i;
+	//     }
+	// }
 
 	// binary searched option
 
 	int left = 1;
-	int right = 128;
-	int mid = 0;
+	int right;
+	if (n < 128) right = n; else right = 128;
+	int mid;
 	while (left <= right) {
 		mid = (left+right)/2;
-		double logResult = evaluateExpression(n, q, m, mid);
+		// cout << left << " "<<mid<< " "<<right<<"\n";
+		double logResult = evaluateExpression(n, q, m, mid,print);
+	    // std::cout << "At index " << mid <<" log x = " << logResult << std::endl;
 		if (logResult < -40.0) {
 			right = mid-1;
 	    }
@@ -620,6 +623,7 @@ int main ( int argc , char* argv[] )
 		ll q = n_left;
 		// q = 1099511627776;
 		int degree = paramcomputer(n_left,q,n_right);
+		cout << "degree is "<<degree<<"\n";
 	}
 	if (argc == 2) {
 		int n_left = atoi(argv[1]);
@@ -640,7 +644,7 @@ int main ( int argc , char* argv[] )
 		}
 		cout << "binary search answer is "<<left<<"\n";
 		ll n_right = left;
-		int degree = paramcomputer(n_left,q,n_right);
+		int degree = paramcomputer(n_left,q,n_right,1);
 		cout << "degree is "<<degree<<"\n";
 	}
 	// testlhtlp();
