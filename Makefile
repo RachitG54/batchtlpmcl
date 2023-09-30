@@ -2,7 +2,7 @@
 # LIBS = ../lib
 # EXT_LIBS = -llhp -lgmp -lpbc -lssl -lcrypto
 
-EXT_LIBS = -lgmp -lpbc -lssl -lcrypto -lmcl
+EXT_LIBS = -lgmp -lpbc -lssl -lcrypto -lmcl -lmsgpackc
 
 
 # MCL_LIB_DIR=~/Documents/Gitrepos/Coderepos/mcl/lib
@@ -17,7 +17,7 @@ CC       = g++
 
 # CFLAGS   = -std=gnu++11 -I ${INCLUDE} -L ${LIBS} ${EXT_LIBS}
 
-CFLAGS   = -std=gnu++11 ${EXT_LIBS}
+CFLAGS   = -std=gnu++11
 
 ifeq ($(DEBUG),y)
 	CFLAGS += -g -pg
@@ -38,7 +38,7 @@ OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 rm        = rm -f
 
 $(BINDIR)/$(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) $(CFLAGS) -o $@
+	$(CC) $(OBJECTS) $(CFLAGS) -o $@ $(EXT_LIBS)
 
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.cpp
 	$(LINKER) -c $< -o $@

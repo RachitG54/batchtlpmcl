@@ -1,8 +1,3 @@
-/*
- * Adithya Bhat <bhat24@purdue.edu>
- * 2019
- * */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -458,6 +453,8 @@ void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	CRSgentime = timergentime.getTime();
 	CRSbytes = testuncobtlp.crsszbytes();
 
+	
+
 	int test = n_left;
 	vector<GT> randgt(test+1);
 	vector<GT> solvegt(test+1);
@@ -484,6 +481,7 @@ void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	}
 	// cout<<"\n";
 	cout <<"Gen done.\n" ;
+	
 
 	// // cout<<"\n\n\n";
 
