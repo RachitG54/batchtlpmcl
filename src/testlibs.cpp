@@ -453,7 +453,7 @@ void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	CRSgentime = timergentime.getTime();
 	CRSbytes = testuncobtlp.crsszbytes();
 
-	
+
 
 	int test = n_left;
 	vector<GT> randgt(test+1);
@@ -545,25 +545,125 @@ void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	// testcobtlp.cleantlp(batcharray);
 }
 
+double logBinomialCoefficient(ll n, ll k) {
+    double result = 0.0;
+    if (k == 0) return 1.0;
+
+    // Since C(n, k) = C(n, n-k)
+    if (k > n - k)
+        k = n - k;
+
+    // Calculate logarithmic value of [n*(n-1)*...*(n-k+1)] / [k*(k-1)*...*1]
+    for (ll i = 0; i < k; ++i) {
+        result += log(n - i);
+    }
+
+    for (ll i = 0; i < k; ++i) {
+        result -= log(i + 1);
+    }
+
+    return result;
+}
+
+double evaluateExpression(ll n, ll q, int m, int d) {
+    double result = 0.0;
+
+    for (ll i = d+1; i <= n; ++i) {
+    	double eval = ((i * d *1.0) * log((i - 1.0) / m));
+        double term = logBinomialCoefficient(q, i) +
+                      logBinomialCoefficient(m, i - 1) + eval;
+                      
+        // cout << term <<" "<<eval<<"\n";
+
+        result += term;
+    }
+
+    return result;
+}
+
+int paramcomputer (ll n, ll q, ll m) {
+
+	// can do binary search here, but already so efficient
+	REP(i,1,128) {
+	    double logResult = evaluateExpression(n, q, m, i);
+		    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	    if (logResult < -40.0) {
+		    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	    	return i;
+	    }
+	}
+
+	// binary searched option
+
+	int left = 1;
+	int right = 128;
+	int mid = 0;
+	while (left <= right) {
+		mid = (left+right)/2;
+		double logResult = evaluateExpression(n, q, m, mid);
+		if (logResult < -40.0) {
+			right = mid-1;
+	    }
+	    else {
+	    	left = mid+1;
+	    }
+	}
+	return left;
+
+}
+
 int main ( int argc , char* argv[] )
 {
+	if(argc == 3) {
+		int n_left = atoi(argv[1]);
+		int n_right = atoi(argv[2]);
+		ll q = n_left;
+		// q = 1099511627776;
+		int degree = paramcomputer(n_left,q,n_right);
+	}
+	if (argc == 2) {
+		int n_left = atoi(argv[1]);
+		ll q = n_left;
+		ll left = n_left;
+		ll right = 128*n_left;
+		ll mid;
+		while(left <= right) {
+			mid = (left+right)/2;
+			// cout << left << " "<<mid<< " "<<right<<"\n";
+			int degree = paramcomputer(n_left,q,mid);
+			if (degree > 2) {
+				left = mid+1;
+			}
+			else {
+				right = mid -1;
+			}
+		}
+		cout << "binary search answer is "<<left<<"\n";
+		ll n_right = left;
+		int degree = paramcomputer(n_left,q,n_right);
+		cout << "degree is "<<degree<<"\n";
+	}
 	// testlhtlp();
 	// testkhprf();
 	// testmcl();
 	// testgmp();
 
 
-	initpairing();
-	// testcobtlpfnarg();
-	if(argc == 4) {
-		int n_left = atoi(argv[1]);
-		int n_right = atoi(argv[2]);
-		int degree = atoi(argv[3]);
-		testuncobtlpfn(n_left,n_right,degree);
-	}
-	else {
-		testuncobtlpfn();
-	}
+	// initpairing();
+
+	// if(argc == 4) {
+	// 	int n_left = atoi(argv[1]);
+	// 	int n_right = atoi(argv[2]);
+	// 	int degree = atoi(argv[3]);
+	// 	int q = n_left
+	// 	testuncobtlpfn(n_left,n_right,degree);
+	// }
+
+	// // testcobtlpfnarg();
+	
+	// else {
+	// 	testuncobtlpfn();
+	// }
 
 	
 	return 0;

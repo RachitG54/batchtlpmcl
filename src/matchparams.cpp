@@ -1,33 +1,33 @@
-#include "btlpincludes.h"
+// #include "btlpincludes.h"
 
-double logBinomialCoefficient(int n, int k) {
-    double result = 0.0;
+// double logBinomialCoefficient(int n, int k) {
+//     double result = 0.0;
 
-    // Since C(n, k) = C(n, n-k)
-    if (k > n - k)
-        k = n - k;
+//     // Since C(n, k) = C(n, n-k)
+//     if (k > n - k)
+//         k = n - k;
 
-    // Calculate logarithmic value of [n*(n-1)*...*(n-k+1)] / [k*(k-1)*...*1]
-    for (int i = 0; i < k; ++i) {
-        result += log((n - i) * 1.0 / (i + 1));
-    }
+//     // Calculate logarithmic value of [n*(n-1)*...*(n-k+1)] / [k*(k-1)*...*1]
+//     for (int i = 0; i < k; ++i) {
+//         result += log((n - i) * 1.0 / (i + 1));
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
-double evaluateExpression(int n, int q, int m, int d) {
-    double result = 0.0;
+// double evaluateExpression(int n, int q, int m, int d) {
+//     double result = 0.0;
 
-    for (int i = d; i <= n; ++i) {
-        double term = logBinomialCoefficient(q, i) +
-                      logBinomialCoefficient(m, i - 1) +
-                      i * d * log((i - 1.0) / m);
+//     for (int i = d; i <= n; ++i) {
+//         double term = logBinomialCoefficient(q, i) +
+//                       logBinomialCoefficient(m, i - 1) +
+//                       i * d * log((i - 1.0) / m);
 
-        result += term;
-    }
+//         result += term;
+//     }
 
-    return result;
-}
+//     return result;
+// }
 
 // int main() {
 //     int n, q, m, d;

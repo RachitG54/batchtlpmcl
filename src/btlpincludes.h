@@ -15,7 +15,7 @@
 #include <ctime>
 #include <mcl/bls12_381.hpp>
 #include <openssl/sha.h>
-#include <msgpack.h>
+#include <msgpack.hpp>
 
 using namespace std;
 using namespace std::chrono;
