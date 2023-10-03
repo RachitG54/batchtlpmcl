@@ -16,7 +16,9 @@ void classuncobtlp::initialize(int d) {
 
 ll classuncobtlp::szbytes() {
 	ll sz = 0;
+	// cout << "deg is "<<deg<<"\n";
 	REP(i,0,deg-1) {
 		sz += btlpvec[i].szbytes();
 	}
+	return sz;
 }

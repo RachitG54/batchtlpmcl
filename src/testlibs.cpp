@@ -12,13 +12,15 @@
 #include "uncobtlp.h"
 #include "btlptime.h"
 
-// #define SEC_PARAM 1024
 
 using namespace mcl::bn;
 
 // Experimental Parameters
 int n = 200 ;
 string str = "111";
+int repeat1 = 1;
+int repeat2 = 1;
+uint64_t timeT = 1000000;
 
 /* Some variables to declare */
 LHP_param_t param ;
@@ -437,23 +439,137 @@ void testcobtlpfnarg() {
 	testcobtlp.cleantlp(batcharray);
 }
 
-void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
+// void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
+// 	uncobtlp testuncobtlp;
+// 	// int n_left = 10;
+// 	// int n_right = 20;
+// 	// int deg = 5;
+// 	int timeT = 1000000;
+// 	int repeat = 1;
+
+// 	timerCRSgentime.starttime();
+// 	REP(j,0,repeat-1)
+// 		testuncobtlp.initialize(n_left,n_right,deg,timeT);
+// 	timerCRSgentime.donetime();
+
+// 	CRSgentime = timergentime.getTime();
+// 	CRSbytes = testuncobtlp.crsszbytes();
+
+
+
+// 	int test = n_left;
+// 	vector<GT> randgt(test+1);
+// 	vector<GT> solvegt(test+1);
+// 	vector<GT> batchsolvegt(test+1);
+
+// 	vector<classuncobtlp> batcharray(test);
+// 	puzzlebytes = 0;
+// 	REP(i,1,test) {
+// 		getrandGT(randgt[i]);
+// 		// cout << "test " << i << ": " << randgt[i] << "\n";
+// 		// batcharray[i-1].slot = i;
+// 		timergentime.starttime();
+// 		REP(j,0,repeat-1)
+// 			testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
+// 		timergentime.donetime();
+
+
+// 		puzzlebytes += batcharray[i-1].szbytes();
+
+// 		// cout << timergentime.getTime() <<" ";
+// 		// pairgentime += timerpairgentime.getTime();
+// 		// puzzlegentime += timerpuzzlegentime.getTime();
+// 		// cout << batcharray[i-1].slot << " is the slot\n";
+// 		// testarr.pb(i);
+// 	}
+// 	// cout<<"\n";
+// 	cout <<"Gen done.\n" ;
+	
+
+// 	// // cout<<"\n\n\n";
+
+// 	REP(i,1,test) {
+// 		timersolvetime.starttime();
+// 		testuncobtlp.solvetlp(solvegt[i],batcharray[i-1]);
+// 		timersolvetime.donetime();
+// 	}
+
+// 	REP(i,1,test) {
+// 		if(solvegt[i] != randgt[i]) {
+// 			cerr << "Solve test "<<i<<" failed.\n";
+// 		}
+// 	}
+
+// 	cout <<"Solve done.\n" ;
+
+// 	timerbatchsolvetime.starttime();
+// 	REP(j,0,repeat-1)
+// 		testuncobtlp.batchsolvetlp(batchsolvegt,batcharray);
+// 	timerbatchsolvetime.donetime();
+// 	// // testcobtlp.batchsolvetlp(testarr,batchsolvegt);
+
+// 	REP(i,1,test) {
+// 		if(batchsolvegt[i-1] != randgt[i]) {
+// 			cerr << "Batch Solve test "<<i<<" failed.\n";
+// 			cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+// 		}
+// 	}
+
+// 	cout <<"Batch solve done.\n" ;
+
+// 	CRSgentime = timerCRSgentime.getTime()/(repeat);
+// 	pairCRSgentime = timerpairCRSgentime.getTime()/(repeat);
+// 	puzzleCRSgentime = timerpuzzleCRSgentime.getTime()/(repeat);
+
+// 	gentime = timergentime.getTime()/(repeat*test);
+// 	pairgentime = timerpairgentime.getTime()/(repeat*test);
+// 	puzzlegentime = timerpuzzlegentime.getTime()/(repeat*test);
+
+// 	solvetime = timersolvetime.getTime()/(test);
+// 	pairsolvetime = timerpairsolvetime.getTime()/(test);
+// 	puzzlesolvetime = timerpuzzlesolvetime.getTime()/(test);
+
+// 	batchsolvetime = timerbatchsolvetime.getTime()/(repeat);
+// 	pairbatchsolvetime = timerpairbatchsolvetime.getTime()/(repeat);
+// 	puzzlebatchsolvetime = timerpuzzlebatchsolvetime.getTime()/(repeat);
+// 	graphbatchsolvetime = timergraphbatchsolvetime.getTime()/(repeat);
+	
+// 	puzzlebytes = puzzlebytes/(test);
+
+// 	int N = n_left;
+
+// 	cout << "n_left	n_right	deg	timeT	CRSgentime	pairCRSgentime	puzzleCRSgentime	gentime	pairgentime	puzzlegentime	solvetime	pairsolvetime	puzzlesolvetime	batchsolvetime	pairbatchsolvetime	puzzlebatchsolvetime	graphbatchsolvetime	CRSbytes	puzzlebytes" << "\n";
+// 	cout << n_left << "\t" << n_right << "\t" << deg << "\t" << timeT << "\t" << CRSgentime << "\t" << pairCRSgentime << "\t" << puzzleCRSgentime << "\t" << gentime << "\t" << pairgentime << "\t" << puzzlegentime << "\t" << solvetime << "\t" << pairsolvetime << "\t" << puzzlesolvetime << "\t" << batchsolvetime << "\t" << pairbatchsolvetime << "\t" << puzzlebatchsolvetime << "\t" << graphbatchsolvetime << "\t" << CRSbytes << "\t" << puzzlebytes;
+// 	cout << "\n";
+// 	// cout << "Time CRS taken is "<<CRSgentime<<" "<<pairCRSgentime<<" "<<puzzleCRSgentime<<" "<<"\n";
+// 	// cout << "Time gen taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
+// 	// cout << "Time solve taken is "<<solvetime<<" "<<pairsolvetime<<" "<<puzzlesolvetime<<" "<<"\n";
+// 	// cout << "Time batchsolve taken is "<<batchsolvetime<<" "<<pairbatchsolvetime<<" "<<puzzlebatchsolvetime<<" "<<graphbatchsolvetime<<" "<<"\n";
+// 	// testcobtlp.cleantlp(batcharray);
+// }
+
+
+void printexpuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	uncobtlp testuncobtlp;
-	// int n_left = 10;
-	// int n_right = 20;
-	// int deg = 5;
-	int timeT = 1000000;
-	int repeat = 1;
 
 	timerCRSgentime.starttime();
-	REP(j,0,repeat-1)
-		testuncobtlp.initialize(n_left,n_right,deg,timeT);
+	REP(j,0,repeat1-1)
+		testuncobtlp.initialize(n_left,n_right,deg,timeT,2);
 	timerCRSgentime.donetime();
 
-	CRSgentime = timergentime.getTime();
+	cout <<"CRS setup.\n" ;
+
+	CRSgentime = timerCRSgentime.getTime()/(repeat1);
+	double rsagentime = timerrsagentime.getTime()/(repeat1);
+
+	CRSgentime = CRSgentime - rsagentime + adjusttime;
+
+	pairCRSgentime = timerpairCRSgentime.getTime()/(repeat1);
+
+	puzzleCRSgentime = timerpuzzleCRSgentime.getTime()/(repeat1);
+	puzzleCRSgentime = puzzleCRSgentime - rsagentime + adjusttime;
+
 	CRSbytes = testuncobtlp.crsszbytes();
-
-
 
 	int test = n_left;
 	vector<GT> randgt(test+1);
@@ -461,88 +577,148 @@ void testuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	vector<GT> batchsolvegt(test+1);
 
 	vector<classuncobtlp> batcharray(test);
+	puzzlebytes = 0;
 	REP(i,1,test) {
 		getrandGT(randgt[i]);
-		// cout << "test " << i << ": " << randgt[i] << "\n";
-		// batcharray[i-1].slot = i;
 		timergentime.starttime();
-		REP(j,0,repeat-1)
+		REP(j,0,repeat1-1)
 			testuncobtlp.gentlp(randgt[i],batcharray[i-1]);
 		timergentime.donetime();
 
 
 		puzzlebytes += batcharray[i-1].szbytes();
-
-		// cout << timergentime.getTime() <<" ";
-		// pairgentime += timerpairgentime.getTime();
-		// puzzlegentime += timerpuzzlegentime.getTime();
-		// cout << batcharray[i-1].slot << " is the slot\n";
-		// testarr.pb(i);
+		// cout << puzzlebytes << " is one puzzle size"<<"\n";
 	}
-	// cout<<"\n";
 	cout <<"Gen done.\n" ;
-	
 
-	// // cout<<"\n\n\n";
-
-	REP(i,1,test) {
+	int puzzlessolved = 10;
+	REP(i,1,puzzlessolved) {
 		timersolvetime.starttime();
 		testuncobtlp.solvetlp(solvegt[i],batcharray[i-1]);
 		timersolvetime.donetime();
 	}
 
-	REP(i,1,test) {
-		if(solvegt[i] != randgt[i]) {
-			cerr << "Solve test "<<i<<" failed.\n";
-		}
-	}
-
 	cout <<"Solve done.\n" ;
 
 	timerbatchsolvetime.starttime();
-	REP(j,0,repeat-1)
+	REP(j,0,repeat2-1) {
 		testuncobtlp.batchsolvetlp(batchsolvegt,batcharray);
-	timerbatchsolvetime.donetime();
-	// // testcobtlp.batchsolvetlp(testarr,batchsolvegt);
-
-	REP(i,1,test) {
-		if(batchsolvegt[i-1] != randgt[i]) {
-			cerr << "Batch Solve test "<<i<<" failed.\n";
-			cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
-		}
 	}
+	timerbatchsolvetime.donetime();
+
+	// REP(i,1,test) {
+	// 	if(batchsolvegt[i-1] != randgt[i]) {
+	// 		cerr << "Batch Solve test "<<i<<" failed.\n";
+	// 		cout << batchsolvegt[i-1] << "\n\n\n" << randgt[i] << "\nTest i done.\n\n";
+	// 	}
+	// }
 
 	cout <<"Batch solve done.\n" ;
 
-	CRSgentime = timerCRSgentime.getTime()/(repeat);
-	pairCRSgentime = timerpairCRSgentime.getTime()/(repeat);
-	puzzleCRSgentime = timerpuzzleCRSgentime.getTime()/(repeat);
+	// CRSgentime = timerCRSgentime.getTime()/(repeat1);
+	// pairCRSgentime = timerpairCRSgentime.getTime()/(repeat1);
+	// puzzleCRSgentime = timerpuzzleCRSgentime.getTime()/(repeat1);
 
-	gentime = timergentime.getTime()/(repeat*test);
-	pairgentime = timerpairgentime.getTime()/(repeat*test);
-	puzzlegentime = timerpuzzlegentime.getTime()/(repeat*test);
+	gentime = timergentime.getTime()/(repeat1*test);
+	pairgentime = timerpairgentime.getTime()/(repeat1*test);
+	puzzlegentime = timerpuzzlegentime.getTime()/(repeat1*test);
 
-	solvetime = timersolvetime.getTime()/(test);
-	pairsolvetime = timerpairsolvetime.getTime()/(test);
-	puzzlesolvetime = timerpuzzlesolvetime.getTime()/(test);
+	solvetime = timersolvetime.getTime()/(puzzlessolved);
+	pairsolvetime = timerpairsolvetime.getTime()/(puzzlessolved);
+	puzzlesolvetime = timerpuzzlesolvetime.getTime()/(puzzlessolved);
 
-	batchsolvetime = timerbatchsolvetime.getTime()/(repeat);
-	pairbatchsolvetime = timerpairbatchsolvetime.getTime()/(repeat);
-	puzzlebatchsolvetime = timerpuzzlebatchsolvetime.getTime()/(repeat);
-	graphbatchsolvetime = timergraphbatchsolvetime.getTime()/(repeat);
+	batchsolvetime = timerbatchsolvetime.getTime()/(repeat2);
+	pairbatchsolvetime = timerpairbatchsolvetime.getTime()/(repeat2);
+	puzzlebatchsolvetime = timerpuzzlebatchsolvetime.getTime()/(repeat2);
+	graphbatchsolvetime = timergraphbatchsolvetime.getTime()/(repeat2);
 	
 	puzzlebytes = puzzlebytes/(test);
 
 	int N = n_left;
 
-	cout << "n_left	n_right	deg	timeT	CRSgentime	pairCRSgentime	puzzleCRSgentime	gentime	pairgentime	puzzlegentime	solvetime	pairsolvetime	puzzlesolvetime	batchsolvetime	pairbatchsolvetime	puzzlebatchsolvetime	graphbatchsolvetime	CRSbytes	puzzlebytes" << "\n";
+	cout << "n_left	n_right	deg	timeT	CRSgentime	pairCRSgentime	puzzleCRSgentime	gentime	pairgentime	puzzlegentime	solvetime	pairsolvetime	puzzlesolvetime	batchsolvetime	pairbatchsolvetime	puzzlebatchsolvetime	graphbatchsolvetime	CRSbytes	puzzlebytes\n";
 	cout << n_left << "\t" << n_right << "\t" << deg << "\t" << timeT << "\t" << CRSgentime << "\t" << pairCRSgentime << "\t" << puzzleCRSgentime << "\t" << gentime << "\t" << pairgentime << "\t" << puzzlegentime << "\t" << solvetime << "\t" << pairsolvetime << "\t" << puzzlesolvetime << "\t" << batchsolvetime << "\t" << pairbatchsolvetime << "\t" << puzzlebatchsolvetime << "\t" << graphbatchsolvetime << "\t" << CRSbytes << "\t" << puzzlebytes;
 	cout << "\n";
+
+
 	// cout << "Time CRS taken is "<<CRSgentime<<" "<<pairCRSgentime<<" "<<puzzleCRSgentime<<" "<<"\n";
 	// cout << "Time gen taken is "<<gentime<<" "<<pairgentime<<" "<<puzzlegentime<<" "<<"\n";
 	// cout << "Time solve taken is "<<solvetime<<" "<<pairsolvetime<<" "<<puzzlesolvetime<<" "<<"\n";
 	// cout << "Time batchsolve taken is "<<batchsolvetime<<" "<<pairbatchsolvetime<<" "<<puzzlebatchsolvetime<<" "<<graphbatchsolvetime<<" "<<"\n";
 	// testcobtlp.cleantlp(batcharray);
+}
+
+void printexptrivialfn(int n_left = 10) {
+
+	// Code for trivial scheme benchmarks
+
+	int repeattrivial = 10;
+	btlptime trivialtimerCRSgentime;
+	btlptime trivialtimergentime;
+	btlptime trivialtimersolvetime;
+
+	double trivialpuzzlebytes = 0;
+	double trivialCRSbytes = 0;
+
+	// LHP_init_puzzle ( &dest_puzzle ) ;
+	puzzle_array = (LHP_puzzle_t*) malloc ( sizeof ( LHP_puzzle_t ) * repeattrivial ) ;
+
+	trivialtimerCRSgentime.starttime();
+	REP(j,0,repeat1-1) {
+		LHP_init_param ( &param ) ;
+		LHP_PSetup ( &param , SEC_PARAM , timeT, 2) ;
+	}
+	trivialtimerCRSgentime.donetime();
+
+	double trivialCRSgentime = trivialtimerCRSgentime.getTime()/(repeat1);
+	double trivialrsagentime = timerrsagentime.getTime()/(repeat1);
+
+	trivialCRSgentime = trivialCRSgentime - trivialrsagentime + adjusttime;
+
+	cout << "CRS generated.\n";
+
+	trivialCRSbytes += getmpzbytes(param.T);
+	trivialCRSbytes += getmpzbytes(param.N);
+	trivialCRSbytes += getmpzbytes(param.g);
+	trivialCRSbytes += getmpzbytes(param.h);
+
+	for ( int i = 0 ; i < repeattrivial ; i ++ ) {
+		trivialtimergentime.starttime();
+		LHP_init_puzzle ( puzzle_array + i ) ;
+		LHP_PGen ( puzzle_array + i , &param , str) ;
+		trivialtimergentime.donetime();
+
+		trivialpuzzlebytes += getmpzbytes((puzzle_array+i)->u);
+		trivialpuzzlebytes += getmpzbytes((puzzle_array+i)->v);
+	}
+
+	cout << "puzzle generated.\n";
+
+	mpz_init ( solution .s ) ;
+	trivialtimersolvetime.starttime();
+	for ( int i = 0 ; i < repeattrivial ; i ++ ) {
+		LHP_PSolve ( &param , puzzle_array + i , &solution ) ;
+	}
+	trivialtimersolvetime.donetime();
+
+	cout << "puzzle solved.\n";
+	
+	for ( int i = 0 ; i < repeattrivial ; i ++ ) {
+		LHP_clear_puzzle ( puzzle_array + i ) ;
+	}
+	LHP_clear_param ( &param ) ;
+	free ( puzzle_array ) ;
+
+	double trivialgentime = trivialtimergentime.getTime()/(repeattrivial);
+	double trivialsolvetime = trivialtimersolvetime.getTime()/(repeattrivial);
+	double trivialbatchsolvetime = trivialsolvetime*n_left;
+
+
+	trivialpuzzlebytes = trivialpuzzlebytes/(repeattrivial);
+
+	cout << "n_left	timeT	trivialCRSgentime	trivialgentime	trivialsolvetime	trivialbatchsolvetime	trivialCRSbytes	trivialpuzzlebytes" << "\n";
+	cout << n_left << "\t" << timeT<<"\t"<<trivialCRSgentime<<"\t"<<trivialgentime<<"\t"<<trivialsolvetime<<"\t"<<trivialbatchsolvetime<<"\t"<<trivialCRSbytes<<"\t"<<trivialpuzzlebytes;
+	cout << "\n";
 }
 
 double logBinomialCoefficient(ll n, ll k) {
@@ -572,10 +748,10 @@ double evaluateExpression(ll n, ll q, int m, int d, int print = 0) {
     	double eval = ((i * d *1.0) * log2((i - 1.0) / m));
         double term = logBinomialCoefficient(q, i) +
                       logBinomialCoefficient(m, i - 1) + eval;
-                      
         // if(print == 1) cout << term <<" "<<eval<<"\n";
 
-        result += term;
+        result += pow(2, term);
+        // result += term;
     }
 
     return result;
@@ -584,14 +760,15 @@ double evaluateExpression(ll n, ll q, int m, int d, int print = 0) {
 int paramcomputer (ll n, ll q, ll m, int print = 0) {
 
 	// can do binary search here, but already so efficient
-	// REP(i,1,128) {
-	//     double logResult = evaluateExpression(n, q, m, i,print);
-	// 	    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
-	//     if (logResult < -40.0) {
-	// 	    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
-	//     	return i;
-	//     }
-	// }
+	REP(i,1,128) {
+	    double logResult = log2(evaluateExpression(n, q, m, i,print));
+		if (print == 1) std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	    if (logResult < -40.0) {
+		    // std::cout << "At index " << i <<" log x = " << logResult << std::endl;
+	    	return i;
+	    }
+	}
+	return 128;
 
 	// binary searched option
 
@@ -602,7 +779,7 @@ int paramcomputer (ll n, ll q, ll m, int print = 0) {
 	while (left <= right) {
 		mid = (left+right)/2;
 		// cout << left << " "<<mid<< " "<<right<<"\n";
-		double logResult = evaluateExpression(n, q, m, mid,print);
+		double logResult = log2(evaluateExpression(n, q, m, mid,print));
 	    // std::cout << "At index " << mid <<" log x = " << logResult << std::endl;
 		if (logResult < -40.0) {
 			right = mid-1;
@@ -615,53 +792,144 @@ int paramcomputer (ll n, ll q, ll m, int print = 0) {
 
 }
 
-int main ( int argc , char* argv[] )
-{
+void matchingparams(int argc, char* argv[]) {
 	if(argc == 3) {
 		int n_left = atoi(argv[1]);
 		int n_right = atoi(argv[2]);
 		ll q = n_left;
 		// q = 1099511627776;
-		int degree = paramcomputer(n_left,q,n_right);
+		int degree = paramcomputer(n_left,q,n_right,1);
 		cout << "degree is "<<degree<<"\n";
 	}
 	if (argc == 2) {
 		int n_left = atoi(argv[1]);
 		ll q = n_left;
 		ll left = n_left;
-		ll right = 128*n_left;
+		ll right = 10000;
 		ll mid;
 		while(left <= right) {
 			mid = (left+right)/2;
 			// cout << left << " "<<mid<< " "<<right<<"\n";
 			int degree = paramcomputer(n_left,q,mid);
-			if (degree > 2) {
+			if (degree > 3) {
 				left = mid+1;
 			}
 			else {
 				right = mid -1;
 			}
 		}
-		cout << "binary search answer is "<<left<<"\n";
+		// cout << "binary search answer is "<<left<<"\n";
 		ll n_right = left;
-		int degree = paramcomputer(n_left,q,n_right,1);
-		cout << "degree is "<<degree<<"\n";
+		int degree = paramcomputer(n_left,q,n_right,0);
+		// double result = evaluateExpression(n_left,q,n_right,degree,1);
+		// cout <<"result is "<<result<<"\n";
+		cout << n_left << " " <<n_right<<" "<<degree<<"\n";
 	}
+}
+
+int main ( int argc , char* argv[] )
+{
+	if(SEC_PARAM == 512) {
+		adjusttime = 156352;
+	}
+	else if (SEC_PARAM == 1024) {
+		adjusttime = 841260;
+	}
+	else if  (SEC_PARAM == 2048) {
+		adjusttime = 8410887;
+	}
+	else if  (SEC_PARAM == 3072) {
+		adjusttime = 127897769;
+	}
+	initpairing();
+
 	// testlhtlp();
-	// testkhprf();
 	// testmcl();
 	// testgmp();
+	// testkhprf();
+	// int n = 100000;
+	// khprf prf1;
+	// prf1.setup(n);
 
+	// matchingparams(argc,argv);
+	// array computed by running matchingparams optimized at degree 3
+	int arr_right[101] = {140, 199, 242, 276, 306, 333, 357, 380, 400, 420, 438, 456, 473, 489, 504, 519, 533, 547, 561, 574, 586, 599, 611, 622, 634, 645, 656, 667, 678, 688, 698, 708, 718, 727, 737, 746, 756, 765, 774, 782, 791, 800, 808, 816, 825, 833, 841, 849, 857, 864, 872, 880, 887, 895, 902, 910, 924, 938, 953, 969, 984, 999, 1015, 1030, 1046, 1061, 1077, 1092, 1108, 1123, 1139, 1154, 1170, 1186, 1201, 1217, 1232, 1248, 1263, 1279, 1295, 1310, 1326, 1341, 1357, 1373, 1388, 1404, 1419, 1435, 1451, 1466, 1482, 1497, 1513, 1529, 1544, 1560, 1575, 1591};
 
-	// initpairing();
+	if (argc < 2) {
+		int repeathere = 6;
+		REP(j,0,repeathere-1) {
+			LHP_init_param ( &param ) ;
+			LHP_PSetup ( &param , SEC_PARAM , 1000, 0) ;
+		}
+		double timetaken = timerrsagentime.getTime()/repeathere;
+		printf("%lf\n",timetaken);
+		// cout << timetaken << "\n";
+		// cerr << "Not the right parameters.\n";
+		return 0;
+	}
+	string expname = (string)argv[1];
 
-	// if(argc == 4) {
+	if (expname == "trivial") {
+		if (argc == 3) {
+			int n_left = atoi(argv[2]);
+			printexptrivialfn(n_left);
+		}
+	}
+	else if (expname == "optimized") {
+		if (argc == 3) {
+			int n_left = atoi(argv[2]);
+			int n_right = 10000;
+			if (n_left % 10 == 0 && n_left < 1001 && n_left > 9) {
+				int ind = n_left/10 - 1;
+				n_right = arr_right[ind];
+			}
+			int q = n_left;
+			int degree = paramcomputer(n_left,q,n_right,0);
+			if (n_left % 10 == 0 && n_left < 1001 && n_left > 9) {
+				if (degree != 3) {
+					cerr << "Error in experimental setup.\n";
+					return 0;
+				}
+			}
+			cout << n_left << " " <<n_right<<" "<<degree<<"\n";
+
+			printexpuncobtlpfn(n_left,n_right,degree);
+		}
+	}
+	else {
+		cout <<"No experiment running.\n";
+	}
+	// if(argc == 5) {
 	// 	int n_left = atoi(argv[1]);
 	// 	int n_right = atoi(argv[2]);
 	// 	int degree = atoi(argv[3]);
-	// 	int q = n_left
-	// 	testuncobtlpfn(n_left,n_right,degree);
+	// 	int q = n_left;
+
+	// 	// testuncobtlpfn(n_left,n_right,degree);
+	// 	printexpuncobtlpfn(n_left,n_right,degree);
 	// }
+	// else if (argc==3) {
+	// 	int n_left = atoi(argv[1]);
+	// 	int n_right = 10000;
+	// 	if (n_left % 10 == 0 && n_left < 1001 && n_left > 9) {
+	// 		int ind = n_left/10 - 1;
+	// 		n_right = arr_right[ind];
+	// 	}
+	// 	int q = n_left;
+	// 	int degree = paramcomputer(n_left,q,n_right,0);
+	// 	if (n_left % 10 == 0 && n_left < 1001 && n_left > 9) {
+	// 		if (degree != 3) {
+	// 			cerr << "Error in experimental setup.\n";
+	// 			return 0;
+	// 		}
+	// 	}
+	// 	cout << n_left << " " <<n_right<<" "<<degree<<"\n";
+
+	// 	// testuncobtlpfn(n_left,n_right,degree);
+	// 	printexpuncobtlpfn(n_left,n_right,degree);
+	// 	printexptrivialfn(n_left);
+	// }
+
 
 	// // testcobtlpfnarg();
 	

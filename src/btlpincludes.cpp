@@ -87,6 +87,9 @@ double batchsolvetime = 0;
 double pairbatchsolvetime = 0;
 double puzzlebatchsolvetime = 0;
 double graphbatchsolvetime = 0;
+
+double adjusttime = 0;
+
 ll CRSbytes = 0;
 ll puzzlebytes = 0;
 

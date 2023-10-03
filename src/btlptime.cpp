@@ -14,6 +14,9 @@ btlptime timerpairbatchsolvetime;
 btlptime timerpuzzlebatchsolvetime;
 btlptime timergraphbatchsolvetime;
 
+btlptime timerrsagentime;
+btlptime timerrsaadjusttime;
+
 btlptime::btlptime() {
 	start = high_resolution_clock::now();
 	duration = duration_cast<microseconds>(start - start);

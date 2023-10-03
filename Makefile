@@ -2,7 +2,8 @@
 # LIBS = ../lib
 # EXT_LIBS = -llhp -lgmp -lpbc -lssl -lcrypto
 
-EXT_LIBS = -lgmp -lpbc -lssl -lcrypto -lmcl -lmsgpackc
+EXT_LIBS = -lgmp -lpbc -lssl -lcrypto -lmcl
+# -lmsgpackc
 
 
 # MCL_LIB_DIR=~/Documents/Gitrepos/Coderepos/mcl/lib

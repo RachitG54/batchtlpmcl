@@ -19,12 +19,12 @@ void getRandomSubset(vi &result, int n, int d) {
     // return subset;
 }
 
-void uncobtlp::initialize(int noleft, int noright, int d, uint64_t t){
+void uncobtlp::initialize(int noleft, int noright, int d, uint64_t t, int genornot){
 	n_right = noright;
 	n_left = noleft;
 	deg = d;
 	T = t;
-	cobtlpinst.initialize(n_right,T);
+	cobtlpinst.initialize(n_right,T,genornot);
 }
 
 // void uncobtlp::gentlp(GT &gtelt) {

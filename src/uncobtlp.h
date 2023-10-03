@@ -10,8 +10,6 @@
 #include "graph.h"
 #include "btlptime.h"
 
-#define SEC_PARAM 1024
-
 using namespace std;
 
 class uncobtlp {
@@ -24,7 +22,7 @@ public:
 	int n_right;
 	int deg;
 	// vector<classuncobtlp> uncobtlparray;
-	void initialize(int noleft, int noright, int deg, uint64_t t);
+	void initialize(int noleft, int noright, int deg, uint64_t t, int genornot = 0);
 	void gentlp(GT &gtelt,classuncobtlp &newtlp);
 	void solvetlp(GT &result,classuncobtlp &newtlp);
 	void batchsolvetlp(vector<GT> &result, vector<classuncobtlp> &batcharray);

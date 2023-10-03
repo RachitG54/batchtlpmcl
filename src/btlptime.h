@@ -32,5 +32,7 @@ extern btlptime timerbatchsolvetime;
 extern btlptime timerpairbatchsolvetime;
 extern btlptime timerpuzzlebatchsolvetime;
 extern btlptime timergraphbatchsolvetime;
+extern btlptime timerrsagentime;
+extern btlptime timerrsaadjusttime;
 
 #endif // btlptime_H

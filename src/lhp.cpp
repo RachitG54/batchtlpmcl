@@ -6,7 +6,7 @@
 #include "lhp.h"
 
 void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
-	uint64_t lambda , uint64_t T )
+	uint64_t lambda , uint64_t T , int genornot)
 {
 	mpz_t p , q , temp , temp2 ;
 	mpz_init2 ( p , lambda ) ;
@@ -14,13 +14,106 @@ void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
 	mpz_init ( temp ) ;
 	mpz_init_set_ui ( temp2 , 2 ) ;
 	mpz_set_ui ( params -> T , T ) ;
-	generate_strong_prime ( p , lambda / 2 ) ; // Generate p = 2p'+ 1
-	generate_strong_prime ( q , lambda / 2 ) ; // Generate q = 2q'+ 1
-	/*gmp_printf ( "Generated %d-bit Strong Primes\np: %Zx\nq: %Zx\n" , lambda , p*/
-		/*, q ) ;*/
-	mpz_mul ( params->N , p , q ) ;
-	char* tempstr = mpz_get_str(NULL, 10, params->N);
-	printf("modulus N is %s\n",tempstr);
+
+	timerrsagentime.starttime();
+	if(genornot == 0) {
+		generate_strong_prime ( p , lambda / 2 ) ; // Generate p = 2p'+ 1
+		generate_strong_prime ( q , lambda / 2 ) ; // Generate q = 2q'+ 1
+		/*gmp_printf ( "Generated %d-bit Strong Primes\np: %Zx\nq: %Zx\n" , lambda , p*/
+			/*, q ) ;*/
+		mpz_mul ( params->N , p , q ) ;
+	}
+	else if (genornot == 1) {
+		generate_strong_prime ( p , lambda / 2 ) ; // Generate p = 2p'+ 1
+		generate_strong_prime ( q , lambda / 2 ) ; // Generate q = 2q'+ 1
+		mpz_mul ( params->N , p , q ) ;
+		stringstream ss;
+		ss << "rsa" << SEC_PARAM << "key";
+		string filename = ss.str();
+		ofstream outputFile("puzzles/"+filename);
+		if (outputFile.is_open()) {
+			cout << "Storing RSA key\n";
+			char* intp = mpz_get_str(NULL, 10, p);
+			outputFile << intp<<"\n";
+			char* intq = mpz_get_str(NULL, 10, q);
+			outputFile << intq<<"\n";
+			char* intN = mpz_get_str(NULL, 10, params->N);
+			outputFile << intN<<"\n";
+			outputFile.close();
+			free(intp);
+			free(intq);
+			free(intN);
+		}
+		else {
+        cerr << "Error opening the file for writing.\n";
+	    }
+
+	}
+	else if (genornot == 2) {
+		stringstream ss;
+		ss << "rsa" << SEC_PARAM << "key";
+		string filename = ss.str();
+		ifstream inputFile("puzzles/"+filename);
+		if (inputFile.is_open()) {
+	        // Read the string from the file
+	        string intp,intq,intN;
+	        inputFile >> intp >> intq >> intN;
+
+	        mpz_set_str(p, intp.c_str(), 10);
+	        mpz_set_str(q, intq.c_str(), 10);
+	        mpz_set_str(params->N, intN.c_str(), 10);
+
+	        inputFile.close();
+
+	        // gmp_printf ( "Read %d-bit Strong Primes p: %Zx\tq: %Zx\t, modulus: %Zx\n" , lambda , p, q, params->N) ;
+	    } else {
+	        cerr << "Error opening the file for reading.\n";
+	    }
+
+	}
+	else if (genornot == 3) {
+		stringstream ss;
+		ss << "rsa" << SEC_PARAM << "key";
+		string filename = ss.str();
+		ifstream inputFile("puzzles/"+filename);
+		if (inputFile.is_open()) {
+	        // Read the string from the file
+	        string intp,intq,intN;
+	        inputFile >> intp >> intq >> intN;
+
+	        mpz_set_str(p, intp.c_str(), 10);
+	        mpz_set_str(q, intq.c_str(), 10);
+	        mpz_set_str(params->N, intN.c_str(), 10);
+
+	        inputFile.close();
+
+	        // gmp_printf ( "Read %d-bit Strong Primes p: %Zx\tq: %Zx\t, modulus: %Zx\n" , lambda , p, q, params->N) ;
+	    } else {
+	        cerr << "Error opening the file for reading.\n";
+	    }
+
+		ofstream outputFile("puzzles/"+filename+"2");
+		if (outputFile.is_open()) {
+			char* intp = mpz_get_str(NULL, 10, p);
+			outputFile << intp<<"\n";
+			char* intq = mpz_get_str(NULL, 10, q);
+			outputFile << intq<<"\n";
+			char* intN = mpz_get_str(NULL, 10, params->N);
+			outputFile << intN<<"\n";
+			outputFile.close();
+			free(intp);
+			free(intq);
+			free(intN);
+		}
+		else {
+        cerr << "Error opening the file for writing.\n";
+	    }
+
+	}
+	timerrsagentime.donetime();
+	
+	// char* tempstr = mpz_get_str(NULL, 10, params->N);
+	// printf("modulus N is %s\n",tempstr);
 	/*
 	 * 1. Generate g = -g^2 mod N
 	 * 2. Generate t1 = phi(n)

@@ -2,13 +2,13 @@
 
 // Assuming for simplicity that we don't store duplicate puzzles for a single slot
 
-void cobtlp::initialize(int number, uint64_t t) {
+void cobtlp::initialize(int number, uint64_t t, int genornot) {
 	n = number;
 	T = t;
 
 	timerpuzzleCRSgentime.starttime();
 	LHP_init_param ( &param ) ;
-	LHP_PSetup ( &param , SEC_PARAM , T) ;
+	LHP_PSetup ( &param , SEC_PARAM , T,genornot) ;
 	timerpuzzleCRSgentime.donetime();
 	// cout <<"LHP initialized.\n" ;
 
@@ -361,10 +361,15 @@ ll cobtlp::crsszbytes() {
 		} 
 		sz += getmclbytes(prf.g2[i]);
 	}
-	sz += getmpzbytes(param.T);
-	sz += getmpzbytes(param.N);
-	sz += getmpzbytes(param.g);
-	sz += getmpzbytes(param.h);
+
+	ll sz2 = 0;
+	sz2 += getmpzbytes(param.T);
+	sz2 += getmpzbytes(param.N);
+	sz2 += getmpzbytes(param.g);
+	sz2 += getmpzbytes(param.h);
+
+	sz += sz2;
+	// cout <<"sz2 is "<<sz2<<"\n";
 	return sz;
 }
 

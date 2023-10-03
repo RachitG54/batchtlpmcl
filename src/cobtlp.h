@@ -20,7 +20,7 @@ public:
 	LHP_param_t param ;
 	vector<classbtlp> btlparray;
 
-	void initialize(int number, uint64_t t);
+	void initialize(int number, uint64_t t, int genornot = 0);
 	// void setuptlp(int number, int i, uint64_t t);
 	void gentlp(int i, GT &gtelt);
 	void gentlp(GT &gtelt, classbtlp &tlpinst);

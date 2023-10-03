@@ -8,12 +8,13 @@
 #include "params.h"
 #include "puzzle.h"
 #include "util.h"
+#include "btlptime.h"
 
 #ifndef __LHP_HEADER__
 #define __LHP_HEADER__
 
 void LHP_PSetup ( LHP_param_t* params , // Parameters to fill
-	uint64_t lambda , uint64_t ) ;
+	uint64_t lambda , uint64_t T, int genornot = 0) ;
 
 // void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , unsigned char* , size_t ) ;
 void LHP_PGen ( LHP_puzzle_t* puzzle , LHP_param_t* pp , string str);

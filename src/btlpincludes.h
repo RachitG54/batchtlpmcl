@@ -7,6 +7,7 @@
 #include <sys/time.h>
 #include <gmp.h>
 #include <iostream>
+#include <fstream>
 #include <cmath>
 #include <vector>
 #include <queue>
@@ -15,7 +16,7 @@
 #include <ctime>
 #include <mcl/bls12_381.hpp>
 #include <openssl/sha.h>
-#include <msgpack.hpp>
+// #include <msgpack.hpp>
 
 using namespace std;
 using namespace std::chrono;
@@ -45,7 +46,7 @@ typedef unsigned char uchar;
 #define constlen 20
 
 #define PRIME_ITERS 25
-#define SEC_PARAM 1024
+#define SEC_PARAM 3072
 
 //these are the parameters we are storing for benchmarking
 
@@ -62,6 +63,9 @@ extern double batchsolvetime;
 extern double pairbatchsolvetime;
 extern double puzzlebatchsolvetime;
 extern double graphbatchsolvetime;
+
+extern double adjusttime;
+
 extern ll CRSbytes;
 extern ll puzzlebytes;
 
