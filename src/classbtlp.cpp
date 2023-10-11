@@ -10,14 +10,15 @@ ll classbtlp::szbytes() {
 	sz += 8; // for time
 
 	sz += getmclbytes(prf.punckey);
-	// cout << getmclbytes(prf.punckey)<<" ";
 
 	sz += getmclbytes(ctpad);
-	// cout << getmclbytes(ctpad)<<" ";
 
 	sz += getmpzbytes(puzzle_ptr->u);
-	// cout << getmpzbytes(puzzle_ptr->u)<<" ";
 	sz += getmpzbytes(puzzle_ptr->v);
+	
+	// cout << getmclbytes(prf.punckey)<<" ";
+	// cout << getmclbytes(ctpad)<<" ";
+	// cout << getmpzbytes(puzzle_ptr->u)<<" ";
 	// cout << getmpzbytes(puzzle_ptr->v)<<"\n";
 
 	// cout << "size is "<<sz<<"\n";

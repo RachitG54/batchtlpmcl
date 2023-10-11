@@ -354,6 +354,7 @@ ll cobtlp::crsszbytes() {
 	REP(i,0,prf.n) {
 		sz += getmclbytes(prf.g1[i]);
 	}
+
 	REP(i,0,2*n+1) {
 		if(i == n+1) {
 			// cout << getmclbytes(prf.g2[i]) << " should be empty.\n"; 

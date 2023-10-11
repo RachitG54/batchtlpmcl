@@ -591,7 +591,7 @@ void printexpuncobtlpfn(int n_left = 10, int n_right = 20, int deg = 5) {
 	}
 	cout <<"Gen done.\n" ;
 
-	int puzzlessolved = 10;
+	int puzzlessolved = 1;
 	REP(i,1,puzzlessolved) {
 		timersolvetime.starttime();
 		testuncobtlp.solvetlp(solvegt[i],batcharray[i-1]);
@@ -652,7 +652,7 @@ void printexptrivialfn(int n_left = 10) {
 
 	// Code for trivial scheme benchmarks
 
-	int repeattrivial = 10;
+	int repeattrivial = 1;
 	btlptime trivialtimerCRSgentime;
 	btlptime trivialtimergentime;
 	btlptime trivialtimersolvetime;
@@ -690,6 +690,7 @@ void printexptrivialfn(int n_left = 10) {
 
 		trivialpuzzlebytes += getmpzbytes((puzzle_array+i)->u);
 		trivialpuzzlebytes += getmpzbytes((puzzle_array+i)->v);
+		// cout << getmpzbytes((puzzle_array+i)->u) << getmpzbytes((puzzle_array+i)->v) << "\n";
 	}
 
 	cout << "puzzle generated.\n";
@@ -805,7 +806,7 @@ void matchingparams(int argc, char* argv[]) {
 		int n_left = atoi(argv[1]);
 		ll q = n_left;
 		ll left = n_left;
-		ll right = 10000;
+		ll right = 100000;
 		ll mid;
 		while(left <= right) {
 			mid = (left+right)/2;
@@ -847,11 +848,19 @@ int main ( int argc , char* argv[] )
 	// testmcl();
 	// testgmp();
 	// testkhprf();
-	// int n = 100000;
-	// khprf prf1;
-	// prf1.setup(n);
+	btlptime timer1;
+	int n = 100000;
+	khprf prf1;
+	timer1.starttime();
+	prf1.setup(n);
+	timer1.donetime();
+	cout << timer1.getTime();
+	return 0;
 
+	// printf("GMP version: %s\n", gmp_version);
+	// return 0;
 	// matchingparams(argc,argv);
+	// return 0;
 	// array computed by running matchingparams optimized at degree 3
 	int arr_right[101] = {140, 199, 242, 276, 306, 333, 357, 380, 400, 420, 438, 456, 473, 489, 504, 519, 533, 547, 561, 574, 586, 599, 611, 622, 634, 645, 656, 667, 678, 688, 698, 708, 718, 727, 737, 746, 756, 765, 774, 782, 791, 800, 808, 816, 825, 833, 841, 849, 857, 864, 872, 880, 887, 895, 902, 910, 924, 938, 953, 969, 984, 999, 1015, 1030, 1046, 1061, 1077, 1092, 1108, 1123, 1139, 1154, 1170, 1186, 1201, 1217, 1232, 1248, 1263, 1279, 1295, 1310, 1326, 1341, 1357, 1373, 1388, 1404, 1419, 1435, 1451, 1466, 1482, 1497, 1513, 1529, 1544, 1560, 1575, 1591};
 
@@ -870,14 +879,16 @@ int main ( int argc , char* argv[] )
 	string expname = (string)argv[1];
 
 	if (expname == "trivial") {
-		if (argc == 3) {
+		if (argc == 4) {
 			int n_left = atoi(argv[2]);
+			timeT = atoi(argv[3]);
 			printexptrivialfn(n_left);
 		}
 	}
 	else if (expname == "optimized") {
-		if (argc == 3) {
+		if (argc == 4) {
 			int n_left = atoi(argv[2]);
+			timeT = atoi(argv[3]);
 			int n_right = 10000;
 			if (n_left % 10 == 0 && n_left < 1001 && n_left > 9) {
 				int ind = n_left/10 - 1;

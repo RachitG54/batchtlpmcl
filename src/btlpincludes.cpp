@@ -54,6 +54,7 @@ void printmpz(mpz_t &num) {
 ll getmclbytes(const G1& x) {
   char ser[1000];
   ll sz = x.serialize(ser,1000); // returns size of punctured key
+  // cout << "String G1 is "<< ser<<"\n";
   return sz;
 }
 ll getmclbytes(const G2& x) {
@@ -64,6 +65,12 @@ ll getmclbytes(const G2& x) {
 ll getmclbytes(const GT& x) {
   char ser[1000];
   ll sz = x.serialize(ser,1000); // returns size of punctured key
+  // REP(i,0,sz-1) {
+    // cout << "Character "<<i<<" is "<< (int)ser[i] << "\n";
+    // if (ser[i] == 0) {
+    //   cout << "grep check "<<i<<"\n";
+    // }
+  // }
   return sz;
 }
 
