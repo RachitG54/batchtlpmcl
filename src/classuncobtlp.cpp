@@ -1,6 +1,6 @@
-//SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT OR GPL-3.0-only
 /*
- * Rachit Garg
+ * Rachit Garg <rachg96@cs.utexas.edu>
  * 2023
  * */
 
