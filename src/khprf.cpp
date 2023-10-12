@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "khprf.h"
 
 // Function to perform the setup

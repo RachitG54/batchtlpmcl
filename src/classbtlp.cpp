@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "classbtlp.h"
 classbtlp::classbtlp() {
 	puzzle_ptr = NULL;

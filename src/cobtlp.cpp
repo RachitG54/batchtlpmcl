@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "cobtlp.h"
 
 // Assuming for simplicity that we don't store duplicate puzzles for a single slot

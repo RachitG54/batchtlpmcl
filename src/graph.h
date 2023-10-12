@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #ifndef graphdef
 #define graphdef
 

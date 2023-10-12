@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "graph.h"
 
 void graph::initialize(int noleft, int noright, int d, vvi &vecgraph) {

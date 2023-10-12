@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "classuncobtlp.h"
 void classuncobtlp::initialize(int d) {
 	deg = d;

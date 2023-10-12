@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>

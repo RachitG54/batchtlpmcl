@@ -1,3 +1,9 @@
+//SPDX-License-Identifier: MIT
+/*
+ * Rachit Garg
+ * 2023
+ * */
+
 #include "uncobtlp.h"
 
 void getRandomSubset(vi &result, int n, int d) {
